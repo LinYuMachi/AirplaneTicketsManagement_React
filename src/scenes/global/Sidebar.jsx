@@ -126,13 +126,16 @@ const Sidebar = () => {
                 setSelected={setSelected}
             />
 
-            {/* <Typography
+{/***  Later Implementation to set check user level to display team data  ****/}
+
+            <Typography
                 variant="h6"
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
                 Data
             </Typography>
+
             <Item
                 title="Manage Team"
                 to="/team"
@@ -140,7 +143,7 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-            <Item
+            {/*<Item
                 title="Contacts Information"
                 to="/contacts"
                 icon={<ContactsOutlinedIcon />}
@@ -170,7 +173,7 @@ const Sidebar = () => {
             />
             <Item
                 title="Tickets Information"
-                to="/contacts"
+                to="/tickets"
                 icon={<ContentPasteSearchOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
