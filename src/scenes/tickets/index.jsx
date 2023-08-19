@@ -1,13 +1,19 @@
-import { Box, useTheme } from "@mui/material";
+import { useState } from "react";
+import { Typography, Modal, Box, Button, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
+import Form from "../form";
 
 import Header from "../../components/Header";
 
 const Tickets = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -55,8 +61,20 @@ const Tickets = () => {
   return (
     <Box m="20px">
       <Header title="TICKETS" subtitle="List of Tickets for look up" />
+      <Button
+        variant="contained"
+        style={{
+          backgroundColor: colors.blueAccent[700],
+          color: colors.grey[100],
+        }}
+        onClick={handleOpen}
+      >
+        Enter a new Ticket
+      </Button>
+      <Modal open={open} onClose={handleClose}>
+        <Form open={open} onClose={handleClose}></Form></Modal>
       <Box
-        m="40px 0 0 0"
+        m="0 0 0 0"
         height="75vh"
         sx={{
           "& .MuiDataGrid-root": {

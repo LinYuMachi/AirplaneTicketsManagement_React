@@ -172,7 +172,7 @@ const Sidebar = () => {
                 setSelected={setSelected}
             />
             <Item
-                title="Tickets Information"
+                title="Tickets"
                 to="/tickets"
                 icon={<ContentPasteSearchOutlinedIcon />}
                 selected={selected}
