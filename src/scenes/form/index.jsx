@@ -103,28 +103,34 @@ const Form = (props) => {
               <TextField
                 fullWidth
                 variant="filled"
-                type="text"
-                label="Address 1"
+                type="date"
+                label="Sale Date"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.address1}
-                name="address1"
-                error={!!touched.address1 && !!errors.address1}
-                helperText={touched.address1 && errors.address1}
-                sx={{ gridColumn: "span 4" }}
+                value={values.saleDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="saleDate"
+                error={!!touched.saleDate && !!errors.saleDate}
+                helperText={touched.saleDate && errors.saleDate}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
-                type="text"
-                label="Address 2"
+                type="date"
+                label="Flight Date"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={!!touched.address2 && !!errors.address2}
-                helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
+                value={values.flightDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="flightDate"
+                error={!!touched.flightDate && !!errors.flightDate}
+                helperText={touched.flightDate && errors.flightDate}
+                sx={{ gridColumn: "span 1" }}
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
@@ -150,16 +156,16 @@ const checkoutSchema = yup.object().shape({
     .string()
     .matches(phoneRegExp, "Phone number is not valid")
     .required("required"),
-  address1: yup.string().required("required"),
-  address2: yup.string().required("required"),
+  saleDate: yup.string().required("required"),
+  flightDate: yup.string().required("required"),
 });
 const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
   contact: "",
-  address1: "",
-  address2: "",
+  saleDate: "",
+  flightDate: "",
 };
 
 export default Form;
