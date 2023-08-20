@@ -164,13 +164,13 @@ const Sidebar = () => {
             >
                 Tickets
             </Typography>
-            <Item
+            {/* <Item
                 title="Entry Form"
                 to="/form"
                 icon={<AirplaneTicketOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
-            />
+            /> */}
             <Item
                 title="Tickets"
                 to="/tickets"
