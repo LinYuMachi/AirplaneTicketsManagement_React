@@ -72,7 +72,7 @@ const Tickets = () => {
         Enter a new Ticket
       </Button>
       <Modal open={open} onClose={handleClose}>
-        <Form open={open} onClose={handleClose}></Form></Modal>
+        <Form onClose={handleClose}></Form></Modal>
       <Box
         m="0 0 0 0"
         height="75vh"
