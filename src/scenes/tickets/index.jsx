@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Typography, Modal, Box, Button, useTheme } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Button,
+  useTheme,
+} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -12,6 +17,7 @@ const Tickets = () => {
   const colors = tokens(theme.palette.mode);
 
   const [open, setOpen] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -72,7 +78,8 @@ const Tickets = () => {
         Enter a new Ticket
       </Button>
       <Modal open={open} onClose={handleClose}>
-        <Form onClose={handleClose}></Form></Modal>
+        <Form onClose={handleClose}></Form>
+      </Modal>
       <Box
         m="0 0 0 0"
         height="75vh"
