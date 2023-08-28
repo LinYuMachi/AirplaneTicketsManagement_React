@@ -80,7 +80,7 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="团队" subtitle="管理团队权限" />
       <Box
         m="40px 0 0 0"
         height="75vh"
