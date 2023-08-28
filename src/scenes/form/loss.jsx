@@ -2,13 +2,9 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {
-    Box,
-    Button,
-    TextField,
-} from "@mui/material";
+import { Box, Button, TextField, Stack } from "@mui/material";
 
-export default function Form2(props) {
+export default function Loss(props) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   return (
@@ -39,7 +35,7 @@ export default function Form2(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="名"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.firstName}
@@ -52,7 +48,7 @@ export default function Form2(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Last Name"
+                label="姓"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.lastName}
@@ -65,7 +61,7 @@ export default function Form2(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Email"
+                label="电子邮箱"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.email}
@@ -78,7 +74,7 @@ export default function Form2(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Contact Number"
+                label="联系号码"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.contact}
@@ -87,11 +83,69 @@ export default function Form2(props) {
                 helperText={touched.contact && errors.contact}
                 sx={{ gridColumn: "span 1" }}
               />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="date"
+                label="起飞日期"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.flightDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="flightDate"
+                error={!!touched.flightDate && !!errors.flightDate}
+                helperText={touched.flightDate && errors.flightDate}
+                sx={{ gridColumn: "span 1" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="date"
+                label="入住日期"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.saleDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="saleDate"
+                error={!!touched.saleDate && !!errors.saleDate}
+                helperText={touched.saleDate && errors.saleDate}
+                sx={{ gridColumn: "span 1" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="date"
+                label="离开日期"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.flightDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="flightDate"
+                error={!!touched.flightDate && !!errors.flightDate}
+                helperText={touched.flightDate && errors.flightDate}
+                sx={{ gridColumn: "span 1" }}
+              />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New Ticket
-              </Button>
+              <Stack direction="row" spacing={2}>
+                <Button
+                  type="reset"
+                  onClick={props.closeModal}
+                  color="error"
+                  variant="contained"
+                >
+                  取消
+                </Button>
+                <Button type="submit" color="secondary" variant="contained">
+                  录入
+                </Button>
+              </Stack>
             </Box>
           </form>
         )}

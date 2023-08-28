@@ -78,7 +78,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  NIU
+                  牛
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -107,10 +107,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  LingYu Chen
+                  王三
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Ticket Admin
+                  管理员
                 </Typography>
               </Box>
             </Box>
@@ -119,7 +119,7 @@ const Sidebar = () => {
           {/* MENU ITEMS */}
           <Box paddingLeft={isCollapsed ? undefined : " 10%"}>
             <Item
-                title="Dashboard"
+                title="面板"
                 to="/"
                 icon={<HomeOutlinedIcon />}
                 selected={selected}
@@ -133,11 +133,11 @@ const Sidebar = () => {
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
-                Data
+                用户
             </Typography>
 
             <Item
-                title="Manage Team"
+                title="管理用户"
                 to="/team"
                 icon={<PeopleOutlinedIcon />}
                 selected={selected}
@@ -162,7 +162,7 @@ const Sidebar = () => {
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
-                Tickets
+                票务
             </Typography>
             {/* <Item
                 title="Entry Form"
@@ -172,7 +172,7 @@ const Sidebar = () => {
                 setSelected={setSelected}
             /> */}
             <Item
-                title="Tickets"
+                title="管理票务"
                 to="/tickets"
                 icon={<ContentPasteSearchOutlinedIcon />}
                 selected={selected}
@@ -197,7 +197,7 @@ const Sidebar = () => {
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
-                Charts
+                图表
             </Typography>
             <Item
                 title="Bar Chart"

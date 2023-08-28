@@ -2,13 +2,9 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {
-    Box,
-    Button,
-    TextField,
-} from "@mui/material";
+import { Box, Button, TextField, Stack } from "@mui/material";
 
-export default function Form1(props) {
+export default function RoundTrip(props) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   return (
@@ -39,7 +35,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="名"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.firstName}
@@ -52,7 +48,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Last Name"
+                label="姓"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.lastName}
@@ -65,7 +61,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Email"
+                label="电子邮箱"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.email}
@@ -78,7 +74,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Contact Number"
+                label="联系号码"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.contact}
@@ -91,7 +87,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="date"
-                label="Sale Date"
+                label="销售日期"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.saleDate}
@@ -107,7 +103,7 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="date"
-                label="Flight Date"
+                label="起飞日期"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.flightDate}
@@ -121,9 +117,19 @@ export default function Form1(props) {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New Ticket
-              </Button>
+              <Stack direction="row" spacing={2}>
+                <Button
+                  type="reset"
+                  onClick={props.closeModal}
+                  color="error"
+                  variant="contained"
+                >
+                  取消
+                </Button>
+                <Button type="submit" color="secondary" variant="contained">
+                  录入
+                </Button>
+              </Stack>
             </Box>
           </form>
         )}

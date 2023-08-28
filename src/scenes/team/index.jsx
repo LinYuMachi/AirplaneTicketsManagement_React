@@ -15,30 +15,30 @@ const Team = () => {
     { field: "id", headerName: "ID" },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "名字",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
       field: "age",
-      headerName: "Age",
+      headerName: "年龄",
       type: "number",
       headerAlign: "left",
       align: "left",
     },
     {
       field: "phone",
-      headerName: "Phone Number",
+      headerName: "联系号码",
       flex: 1,
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: "电子邮箱",
       flex: 1,
     },
     {
       field: "accessLevel",
-      headerName: "Access Level",
+      headerName: "用户等级",
       flex: 1,
       renderCell: ({ row: { access } }) => {
         return (
@@ -61,7 +61,16 @@ const Team = () => {
             {access === "manager" && <SecurityOutlinedIcon />}
             {access === "user" && <LockOpenOutlinedIcon />}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
+              {(() => {
+                switch(access) {
+                  case "admin":
+                    return "管理";
+                  case "manager":
+                    return "经理";
+                  case "user":
+                    return "用户";
+                }
+              })()}
             </Typography>
           </Box>
         );
@@ -72,28 +81,32 @@ const Team = () => {
   return (
     <Box m="20px">
       <Header title="TEAM" subtitle="Managing the Team Members" />
-      <Box m="40px 0 0 0" height="75vh" sx={{
-        "& .MuiDataGrid-root": {
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
             border: "none",
-        },
-        "& .MuiDataGrid-cell": {
-            borderBottom: "none"
-        },
-        "& .name-column--cell": {
-            color: colors.greenAccent[300]
-        },
-        "& .MuiDataGrid-columnHeaders": {
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
-            borderBottom: "none"
-        },
-        "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400]
-        },
-        "& .MuiDataGrid-footerContainer": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
             backgroundColor: colors.blueAccent[700],
-        },
-      }}>
+          },
+        }}
+      >
         <DataGrid rows={mockDataTeam} columns={columns} />
       </Box>
     </Box>
