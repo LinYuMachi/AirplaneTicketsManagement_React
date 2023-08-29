@@ -26,7 +26,7 @@ export default function Other(props) {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+              gridTemplateColumns="repeat(8, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
               }}
@@ -43,7 +43,7 @@ export default function Other(props) {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 4" }}
+                sx={{ gridColumn: "span 16" }}
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">

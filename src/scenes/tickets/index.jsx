@@ -217,7 +217,7 @@ const Tickets = () => {
 
   return (
     <Box m="20px">
-      <Header title="票务管理" subtitle="所有目前票务" />
+      <Header title="订单管理" subtitle="订单信息管理" />
       <Button
         variant="contained"
         style={{
@@ -226,7 +226,7 @@ const Tickets = () => {
         }}
         onClick={handleOpen}
       >
-        输入新票务
+        输入新订单
       </Button>
       <Modal open={open} onClose={handleClose}>
         <Form onClose={handleClose}></Form>

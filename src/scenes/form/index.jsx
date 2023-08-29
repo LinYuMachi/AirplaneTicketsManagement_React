@@ -44,7 +44,7 @@ const Form = (props) => {
         p: 4,
       }}
     >
-      <Header title="输入新票务" subtitle="在这里选择表格输入票务" />
+      <Header title="输入新订单" subtitle="在这里选择表格输入订单" />
       <IconButton
         aria-label="close"
         onClick={props.onClose}

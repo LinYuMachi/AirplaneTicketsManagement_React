@@ -172,7 +172,7 @@ const Sidebar = () => {
                 setSelected={setSelected}
             /> */}
             <Item
-                title="管理票务"
+                title="管理订单"
                 to="/tickets"
                 icon={<ContentPasteSearchOutlinedIcon />}
                 selected={selected}

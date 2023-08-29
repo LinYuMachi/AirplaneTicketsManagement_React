@@ -26,7 +26,7 @@ export default function RoundTrip(props) {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+              gridTemplateColumns="repeat(8, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
               }}
@@ -42,7 +42,7 @@ export default function RoundTrip(props) {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -55,7 +55,7 @@ export default function RoundTrip(props) {
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -68,7 +68,7 @@ export default function RoundTrip(props) {
                 name="email"
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -81,13 +81,13 @@ export default function RoundTrip(props) {
                 name="contact"
                 error={!!touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="date"
-                label="销售日期"
+                label="录入日期"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.saleDate}
@@ -103,7 +103,23 @@ export default function RoundTrip(props) {
                 fullWidth
                 variant="filled"
                 type="date"
-                label="起飞日期"
+                label="出发日期"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.flightDate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                name="flightDate"
+                error={!!touched.flightDate && !!errors.flightDate}
+                helperText={touched.flightDate && errors.flightDate}
+                sx={{ gridColumn: "span 1" }}
+              />
+              <TextField
+                fullWidth
+                variant="filled"
+                type="date"
+                label="返回日期"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.flightDate}
