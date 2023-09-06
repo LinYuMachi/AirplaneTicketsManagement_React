@@ -3,22 +3,21 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import Header from "../../components/Header";
-import RoundTrip from "./roundtrip";
-import Oneway from "./oneway";
-import TicketVisaHousing from "./ticketvisahousing";
-import TicketVisa from "./ticketvisa";
-import TicketHousing from "./tickethousing";
-import Visa from "./visa";
-import Housing from "./housing";
-import HousingDiff from "./housingdiff";
-import Reschedule from "./reschedule";
-import Substitution from "./subsitution";
-import Upgrade from "./upgrade";
-import Loss from "./loss";
-import Other from "./other";
+import Ticket from "../../components/forms/ticket";
+import TicketVisaHousing from "../../components/forms/ticketvisahousing";
+import TicketVisa from "../../components/forms/ticketvisa";
+import TicketHousing from "../../components/forms/tickethousing";
+import Visa from "../../components/forms/visa";
+import Housing from  "../../components/forms/housing";
+import HousingDiff from "../../components/forms/housingdiff";
+import Reschedule from "../../components/forms/reschedule";
+import Substitution from "../../components/forms/subsitution";
+import Upgrade from "../../components/forms/upgrade";
+import Loss from "../../components/forms/loss";
+import Other from "../../components/forms/other";
 
 const Form = (props) => {
-  const [form, setForm] = useState("roundtrip");
+  const [form, setForm] = useState("ticket");
 
   const handleFormChange = (e) => {
     console.log(e.target.value);
@@ -66,8 +65,7 @@ const Form = (props) => {
           label="Form"
           onChange={handleFormChange}
         >
-          <MenuItem value={"roundtrip"}>机票往返</MenuItem>
-          <MenuItem value={"oneway"}>机票单程</MenuItem>
+          <MenuItem value={"ticket"}>机票</MenuItem>
           <MenuItem value={"ticketvisahousing"}>
             机票+签证+住宿
           </MenuItem>
@@ -85,10 +83,8 @@ const Form = (props) => {
       </FormControl>
       {(() => {
         switch (form) {
-          case "roundtrip":
-            return <RoundTrip handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
-          case "oneway":
-            return <Oneway handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+          case "ticket":
+            return <Ticket handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
           case "ticketvisahousing":
             return <TicketVisaHousing handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
           case "ticketvisa":
@@ -112,7 +108,7 @@ const Form = (props) => {
           case "other":
             return <Other handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
           default:
-            return <Oneway handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Ticket handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
         }
       })()}
     </Box>

@@ -2,14 +2,26 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Box, Button, TextField, Stack } from "@mui/material";
+import { Box, Button, TextField, Stack, Select, MenuItem } from "@mui/material";
+import { useRef } from "react";
 
-export default function Oneway(props) {
+export default function Ticket(props) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [trip, setTrip] = React.useState("oneway");
+  const formikRef = useRef();
+
+  const handleTripChange = (e) => {
+    console.log(e.target.value);
+    setTrip(e.target.value);
+    if (formikRef.current) {
+      formikRef.current.setFieldValue("triptype", e.target.value);
+    }
+  };
 
   return (
     <>
       <Formik
+        innerRef={formikRef}
         onSubmit={props.handleFormSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
@@ -31,6 +43,18 @@ export default function Oneway(props) {
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
               }}
             >
+              <Select
+                labelId="trip-select-label"
+                id="trip-select"
+                value={trip}
+                label="Trip"
+                onChange={handleTripChange}
+                name="triptype"
+                sx={{gridColumn: "span 2"}}
+              >
+                <MenuItem value={"oneway"}>单程</MenuItem>
+                <MenuItem value={"roundtrip"}>往返</MenuItem>
+              </Select>
               <TextField
                 fullWidth
                 variant="filled"
@@ -42,7 +66,7 @@ export default function Oneway(props) {
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 1" }}
+                sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
@@ -55,7 +79,7 @@ export default function Oneway(props) {
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 1" }}
+                sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
@@ -68,7 +92,7 @@ export default function Oneway(props) {
                 name="email"
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 1" }}
+                sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
@@ -81,7 +105,7 @@ export default function Oneway(props) {
                 name="contact"
                 error={!!touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 1" }}
+                sx={{ gridColumn: "span 2" }}
               />
               <TextField
                 fullWidth
@@ -97,7 +121,7 @@ export default function Oneway(props) {
                 name="flightDate"
                 error={!!touched.flightDate && !!errors.flightDate}
                 helperText={touched.flightDate && errors.flightDate}
-                sx={{ gridColumn: "span 1" }}
+                sx={{ gridColumn: "span 2" }}
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
@@ -135,10 +159,10 @@ const checkoutSchema = yup.object().shape({
     .required("required"),
 });
 const initialValues = {
+  triptype: "oneway",
   firstName: "",
   lastName: "",
   email: "",
   contact: "",
-  saleDate: "",
   flightDate: "",
 };
