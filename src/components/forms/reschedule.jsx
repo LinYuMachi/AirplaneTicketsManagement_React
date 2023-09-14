@@ -2,13 +2,9 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import {
-    Box,
-    Button,
-    TextField,
-} from "@mui/material";
+import { Box, Button, TextField, Stack } from "@mui/material";
 
-export default function Form1(props) {
+export default function Reschedule(props) {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   return (
@@ -30,7 +26,7 @@ export default function Form1(props) {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+              gridTemplateColumns="repeat(8, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
               }}
@@ -39,75 +35,59 @@ export default function Form1(props) {
                 fullWidth
                 variant="filled"
                 type="text"
-                label="First Name"
+                label="名"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.firstName}
                 name="firstName"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Last Name"
+                label="姓"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.lastName}
                 name="lastName"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Email"
+                label="电子邮箱"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.email}
                 name="email"
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="text"
-                label="Contact Number"
+                label="联系号码"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.contact}
                 name="contact"
                 error={!!touched.contact && !!errors.contact}
                 helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="date"
-                label="Sale Date"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.saleDate}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                name="saleDate"
-                error={!!touched.saleDate && !!errors.saleDate}
-                helperText={touched.saleDate && errors.saleDate}
                 sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
                 variant="filled"
                 type="date"
-                label="Flight Date"
+                label="起飞日期"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.flightDate}
@@ -121,9 +101,19 @@ export default function Form1(props) {
               />
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New Ticket
-              </Button>
+              <Stack direction="row" spacing={2}>
+                <Button
+                  type="reset"
+                  onClick={props.closeModal}
+                  color="error"
+                  variant="contained"
+                >
+                  取消
+                </Button>
+                <Button type="submit" color="secondary" variant="contained">
+                  录入
+                </Button>
+              </Stack>
             </Box>
           </form>
         )}
@@ -143,8 +133,6 @@ const checkoutSchema = yup.object().shape({
     .string()
     .matches(phoneRegExp, "Phone number is not valid")
     .required("required"),
-  saleDate: yup.string().required("required"),
-  flightDate: yup.string().required("required"),
 });
 const initialValues = {
   firstName: "",
