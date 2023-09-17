@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Box, Button, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar, zhCN } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
+import { mockDataContacts } from "../../data/mockData"; //Require later API replacement for orders
 import Form from "../form";
 
 import Header from "../../components/Header";
@@ -171,7 +171,8 @@ const Tickets = () => {
     aggregationFunctionLabelMax: '最大',
     aggregationFunctionLabelSize: '大小'
   };
-
+  
+  // Data format columns for orders 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     { field: "registrarId", headerName: "客户ID" },
