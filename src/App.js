@@ -13,6 +13,7 @@ import ApiClient from "./api/ApiClient";
 import {ApiClientTest} from "./scenes/test/ApiClientTest";
 import React from 'react';
 import MockApiClient from "./api/MockApiClient";
+import Flight from "./scenes/flight";
 // import Line from "./scenes/line";
 // import Pie from "./scenes/pie";
 // import FAQ from "./scenes/faq";
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/team" element={<Team/>} />
                 <Route path="/tickets" element={<Tickets/>} />
                 <Route path="/test" element={<ApiClientTest/>} />
+                <Route path="/flights" element={<Flight/>} />
                 {/* <Route path="/invoices" element={<Invoices/>} /> */}
                 {/* <Route path="/form" element={<Form/>} /> */}
                 {/* <Route path="/bar" element={<Bar/>} /> */}

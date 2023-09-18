@@ -1281,3 +1281,70 @@ export const mockGeographyData = [
     value: 171135,
   },
 ];
+
+export const mockFlightData = [
+  {
+    "flights": [
+        {
+            "id": "32444128-7864-4356-8e44-60de945aae13",
+            "flightNumber": "TestCreate1",
+            "origin": "ABC",
+            "destination": "DEF",
+            "departureTime": "2004-10-19T10:23:54+02:00",
+            "arrivalTime": "2004-10-19T11:23:54+02:00",
+            "charterCost": 12345.67,
+            "tax": 32.1,
+            "economyCount": 150,
+            "economyAdultPrice": 1.1,
+            "economyChildPrice": 2.2,
+            "economyInfantPrice": 3.3,
+            "businessCount": 160,
+            "businessAdultPrice": 4.4,
+            "businessChildPrice": 5.5,
+            "businessInfantPrice": 6.6,
+            "createdAt": 1694488967.248735,
+            "createdBy": "system"
+        },
+        {
+            "id": "1ab3da93-0de0-48a0-96c9-9dc6c827e720",
+            "flightNumber": "TestCreate3",
+            "origin": "ABC",
+            "destination": "DEF",
+            "departureTime": "2004-10-19T01:23:54+02:00",
+            "arrivalTime": "2004-10-19T11:23:54+02:00",
+            "charterCost": 12345.67,
+            "tax": 32.1,
+            "economyCount": 150,
+            "economyAdultPrice": 1.13,
+            "economyChildPrice": 2.2,
+            "economyInfantPrice": 3.3,
+            "businessCount": 160,
+            "businessAdultPrice": 4.4,
+            "businessChildPrice": 5.5,
+            "businessInfantPrice": 6.6,
+            "createdAt": 1694490810.865905,
+            "createdBy": "system"
+        },
+        {
+            "id": "1e194c3b-d9c6-40ef-a3b7-814f5455de48",
+            "flightNumber": "TestCreate4",
+            "origin": "ABC",
+            "destination": "DEF",
+            "departureTime": "2004-10-19T03:23:54+02:00",
+            "arrivalTime": "2004-10-19T11:23:54+02:00",
+            "charterCost": 12345.67,
+            "tax": 32.1,
+            "economyCount": 150,
+            "economyAdultPrice": 1.13,
+            "economyChildPrice": 2.2,
+            "economyInfantPrice": 3.3,
+            "businessCount": 160,
+            "businessAdultPrice": 4.4,
+            "businessChildPrice": 5.5,
+            "businessInfantPrice": 6.6,
+            "createdAt": 1694490810.866112,
+            "createdBy": "system"
+        }
+    ]
+}
+]

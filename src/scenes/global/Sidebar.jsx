@@ -162,7 +162,7 @@ const Sidebar = () => {
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
-                票务
+                航班/订单
             </Typography>
             {/* <Item
                 title="Entry Form"
@@ -171,6 +171,13 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             /> */}
+            <Item
+                title="管理航班"
+                to="/flights"
+                icon={<AirplaneTicketOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+            />
             <Item
                 title="管理订单"
                 to="/tickets"
