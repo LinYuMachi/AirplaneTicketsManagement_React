@@ -81,7 +81,7 @@ export default function FlightForm(props) {
         </IconButton>
         <Formik
           onSubmit={submitFlightForm}
-          initialValues={initialValues}
+          initialValues={props.initialValues}
           validationSchema={checkoutSchema}
         >
           {({
@@ -392,21 +392,21 @@ const checkoutSchema = yup.object().shape({
   businessChildPrice: yup.string().required("required"),
   businessInfantPrice: yup.string().required("required"),
 });
-const initialValues = {
-  flightNumber: "",
-  origin: "",
-  destination: "",
-  departureDate: "",
-  departureTime: "",
-  arrivalTime: "",
-  charterCost: "",
-  tax: "",
-  economyCount: "",
-  economyAdultPrice: "",
-  economyChildPrice: "",
-  economyInfantPrice: "",
-  businessCount: "",
-  businessAdultPrice: "",
-  businessChildPrice: "",
-  businessInfantPrice: "",
-};
+// const initialValues = {
+//   flightNumber: "",
+//   origin: "",
+//   destination: "",
+//   departureDate: "",
+//   departureTime: "",
+//   arrivalTime: "",
+//   charterCost: "",
+//   tax: "",
+//   economyCount: "",
+//   economyAdultPrice: "",
+//   economyChildPrice: "",
+//   economyInfantPrice: "",
+//   businessCount: "",
+//   businessAdultPrice: "",
+//   businessChildPrice: "",
+//   businessInfantPrice: "",
+// };

@@ -194,6 +194,50 @@ const Flight = () => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  //Initalize data for form
+  const [initialData, setInitialData] = useState({
+    flightNumber: "",
+    origin: "",
+    destination: "",
+    departureDate: "",
+    departureTime: "",
+    arrivalTime: "",
+    charterCost: "",
+    tax: "",
+    economyCount: "",
+    economyAdultPrice: "",
+    economyChildPrice: "",
+    economyInfantPrice: "",
+    businessCount: "",
+    businessAdultPrice: "",
+    businessChildPrice: "",
+    businessInfantPrice: "",
+  });
+
+  const editInitialData = (id) => {
+    console.log(id);
+    const editingflight = flights.find((flight) => flight.id === id);
+    console.log(editingflight);
+    setInitialData({
+      flightNumber: editingflight.flightNumber,
+      origin: editingflight.origin,
+      destination: editingflight.destination,
+      departureDate: formatDate(editingflight.departureTime),
+      departureTime: formatTime(editingflight.departureTime),
+      arrivalTime: formatTime(editingflight.arrivalTime),
+      charterCost: editingflight.charterCost,
+      tax: editingflight.tax,
+      economyCount: editingflight.economyCount,
+      economyAdultPrice: editingflight.economyAdultPrice,
+      economyChildPrice: editingflight.economyChildPrice,
+      economyInfantPrice: editingflight.economyInfantPrice,
+      businessCount: editingflight.businessCount,
+      businessAdultPrice: editingflight.businessAdultPrice,
+      businessChildPrice: editingflight.businessChildPrice,
+      businessInfantPrice: editingflight.businessInfantPrice,
+    });
+  };
+
   //Flight entry modal open status
   const [open, setOpen] = useState(false);
 
@@ -377,6 +421,7 @@ const Flight = () => {
             <Button
               color="secondary"
               onClick={() => {
+                editInitialData(id);
                 handleOpen();
               }}
             >
@@ -410,22 +455,8 @@ const Flight = () => {
         }}
         onClick={handleOpen}
       >
-        输入新航班yaowo
+        输入新航班
       </Button>
-      <Modal
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          maxWidth: "50em",
-          margin: "0 auto",
-          padding: "16px",
-        }}
-        open={open}
-        onClose={handleClose}
-      >
-        <FlightForm onClose={handleClose}></FlightForm>
-      </Modal>
       <Box
         m="0 0 0 0"
         height="75vh"
@@ -467,6 +498,24 @@ const Flight = () => {
           loading={loading}
         />
       </Box>
+
+      <Modal
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          maxWidth: "50em",
+          margin: "0 auto",
+          padding: "16px",
+        }}
+        open={open}
+        onClose={handleClose}
+      >
+        <FlightForm
+          onClose={handleClose}
+          initialValues={initialData}
+        ></FlightForm>
+      </Modal>
     </Box>
   );
 };
