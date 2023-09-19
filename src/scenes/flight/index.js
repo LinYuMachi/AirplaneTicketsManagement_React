@@ -192,7 +192,7 @@ function formatDateTime(timestamp) {
 const Flight = () => {
   const apiClient = useContext(ApiContext);
   const [flights, setFlights] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //Flight entry modal open status
   const [open, setOpen] = useState(false);
@@ -211,13 +211,25 @@ const Flight = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  // API call to retrieve flight data
   useEffect(() => {
-    // setLoading(true);
+    setLoading(true);
     apiClient.listFlights().then((data) => {
-      setFlights(data);
+      setFlights(data.flights);
+      setLoading(false);
     });
-    // setLoading(false);
   }, []);
+
+  console.log("flights: ", flights);
+
+  // Delete button function to remove a data row from the datagrid
+  const handleDeleteClick = (id) => () => {
+    console.log(id);
+    setFlights(flights.filter((flight) => flight.id !== id));
+    console.log(flights);
+  };
+
+  const reloadData = () => {};
 
   const columns = [
     {
@@ -356,14 +368,23 @@ const Flight = () => {
       headerName: "操作",
       flex: 1,
       headerAlign: "center",
-      align: "left",
+      align: "center",
       minWidth: 100,
       sortable: false,
-      renderCell: () => {
+      renderCell: ({ row: { id } }) => {
         return (
           <div>
-            <Button color="secondary">编辑</Button>
-            <Button color="error">删除</Button>
+            <Button
+              color="secondary"
+              onClick={() => {
+                handleOpen();
+              }}
+            >
+              编辑
+            </Button>
+            <Button color="error" onClick={handleDeleteClick(id)}>
+              删除
+            </Button>
           </div>
         );
       },
@@ -389,7 +410,7 @@ const Flight = () => {
         }}
         onClick={handleOpen}
       >
-        输入新航班
+        输入新航班yaowo
       </Button>
       <Modal
         sx={{
@@ -437,12 +458,13 @@ const Flight = () => {
       >
         <DataGrid
           localeText={zhCNGrid}
-          rows={flights.flights ?? []}
+          rows={flights ?? []}
           columns={columns}
           slots={{
             toolbar: GridToolbar,
           }}
           rowHeight={100}
+          loading={loading}
         />
       </Box>
     </Box>

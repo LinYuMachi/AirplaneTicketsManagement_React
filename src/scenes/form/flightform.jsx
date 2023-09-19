@@ -2,7 +2,15 @@ import React, { useContext } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Box, Button, TextField, Stack, Typography, Grid, Divider } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Stack,
+  Typography,
+  Grid,
+  Divider,
+} from "@mui/material";
 import Header from "../../components/Header";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -10,8 +18,10 @@ import { ApiContext } from "../../App";
 
 export default function FlightForm(props) {
   const apiClient = useContext(ApiContext);
+  const [submitting, setSubmitting] = React.useState(false);
 
   const submitFlightForm = (inputObject) => {
+    setSubmitting(true);
     const outputObject = {
       flightNumber: inputObject.flightNumber,
       origin: inputObject.origin.toUpperCase(), // Convert origin to uppercase
@@ -31,7 +41,11 @@ export default function FlightForm(props) {
     };
     console.log(inputObject);
     console.log(outputObject);
-    apiClient.insertFlights(outputObject).then((resp) => console.log(resp));
+    apiClient.insertFlights(outputObject).then((resp) => {
+      console.log(resp);
+      setSubmitting(false);
+      props.onClose();
+    });
     console.log("Successful!");
   };
 
@@ -42,7 +56,7 @@ export default function FlightForm(props) {
           position: "absolute",
           top: "50%",
           left: "50%",
-          width: "50vw",
+          width: "35vw",
           transform: "translate(-50%, -50%)",
           bgcolor: "background.paper",
           border: "2px solid #000",
@@ -79,7 +93,7 @@ export default function FlightForm(props) {
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit}>
-              <Grid container sx={{ flexGrow: 1 }} >
+              <Grid container sx={{ flexGrow: 1 }}>
                 <Grid container xs={12} rowGap={3}>
                   <TextField
                     fullWidth
@@ -334,7 +348,14 @@ export default function FlightForm(props) {
                   >
                     取消
                   </Button>
-                  <Button type="submit" color="secondary" variant="contained">
+                  <Button
+                    // onClick={() => {
+                    //   props.onClose();
+                    // }}
+                    type="submit"
+                    color="secondary"
+                    variant="contained"
+                  >
                     录入
                   </Button>
                 </Stack>
