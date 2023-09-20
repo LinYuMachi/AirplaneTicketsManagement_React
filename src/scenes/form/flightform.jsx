@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   Box,
   Button,
@@ -9,7 +8,8 @@ import {
   Stack,
   Typography,
   Grid,
-  Divider,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Header from "../../components/Header";
 import IconButton from "@mui/material/IconButton";
@@ -17,8 +17,45 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ApiContext } from "../../App";
 
 export default function FlightForm(props) {
+
   const apiClient = useContext(ApiContext);
   const [submitting, setSubmitting] = React.useState(false);
+
+  const [flightData, setFlightData] = React.useState(props.flights);
+
+  //formik ref
+  const formik = useRef();
+
+  const handleSelectChange = (event) => {
+    const selectedFlightId = event.target.value;
+    // Find the selected flight object from your flightData array
+    const selectedFlight = flightData.find(
+      (flight) => flight.id === selectedFlightId
+    );
+
+    if (formik.current) {
+      console.log(selectedFlight);
+      formik.current.setValues({
+        ...formik.values,
+        flightNumber: selectedFlight.flightNumber,
+        origin: selectedFlight.origin,
+        destination: selectedFlight.destination,
+        departureDate: selectedFlight.departureTime.substring(0, 10),
+        departureTime: selectedFlight.departureTime.substring(11, 16),
+        arrivalTime: selectedFlight.arrivalTime.substring(11, 16),
+        charterCost: selectedFlight.charterCost ? selectedFlight.charterCost : "",
+        tax: selectedFlight.tax ? selectedFlight.tax : "",
+        economyCount: selectedFlight.economyCount.toString(),
+        economyAdultPrice: selectedFlight.economyAdultPrice.toString(),
+        economyChildPrice: selectedFlight.economyChildPrice.toString(),
+        economyInfantPrice: selectedFlight.economyInfantPrice.toString(),
+        businessCount: selectedFlight.businessCount.toString(),
+        businessAdultPrice: selectedFlight.businessAdultPrice.toString(),
+        businessChildPrice: selectedFlight.businessChildPrice.toString(),
+        businessInfantPrice: selectedFlight.businessInfantPrice.toString(),
+      });
+    }
+  };
 
   const submitFlightForm = (inputObject) => {
     setSubmitting(true);
@@ -28,7 +65,9 @@ export default function FlightForm(props) {
       destination: inputObject.destination.toUpperCase(), // Convert destination to uppercase
       departureTime: `${inputObject.departureDate}T${inputObject.departureTime}:00+02:00`, // Combine date and time
       arrivalTime: `${inputObject.departureDate}T${inputObject.arrivalTime}:00+02:00`, // Combine date and time
-      charterCost: inputObject.charterCost ? inputObject.charterCost.toString() : "", // Convert to string
+      charterCost: inputObject.charterCost
+        ? inputObject.charterCost.toString()
+        : "", // Convert to string
       tax: inputObject.tax ? inputObject.tax.toString() : "", // Convert to string
       economyCount: inputObject.economyCount.toString(), // Convert to string
       economyAdultPrice: inputObject.economyAdultPrice.toString(), // Convert to string
@@ -49,14 +88,15 @@ export default function FlightForm(props) {
         props.onClose();
         props.reloadData();
       });
-    }
-    else if (props.isUpdate === true) {
-      apiClient.updateFlight(inputObject.flightId, outputObject).then((resp) => {
-        console.log("updated");
-        setSubmitting(false);
-        props.onClose();
-        props.reloadData();
-      })
+    } else if (props.isUpdate === true) {
+      apiClient
+        .updateFlight(inputObject.flightId, outputObject)
+        .then((resp) => {
+          console.log("updated");
+          setSubmitting(false);
+          props.onClose();
+          props.reloadData();
+        });
     }
 
     props.setIsUpdate(false);
@@ -80,8 +120,14 @@ export default function FlightForm(props) {
           overflow: "auto",
         }}
       >
-        {props.initialValues.flightId && <Typography>Flight ID: {props.initialValues.flightId}</Typography>}
-        <Header title="输入新航班" subtitle="在这里输入航班" />
+        {props.initialValues.flightId && (
+          <Typography>ID: {props.initialValues.flightId}</Typography>
+        )}
+        {props.initialValues.flightId ? (
+          <Header title="更新航班" subtitle="在这里更新航班" />
+        ) : (
+          <Header title="输入新航班" subtitle="在这里输入航班" />
+        )}
         <IconButton
           aria-label="close"
           onClick={props.onClose}
@@ -95,6 +141,7 @@ export default function FlightForm(props) {
           <CloseIcon />
         </IconButton>
         <Formik
+          innerRef={formik}
           onSubmit={submitFlightForm}
           initialValues={props.initialValues}
           validationSchema={checkoutSchema}
@@ -108,6 +155,14 @@ export default function FlightForm(props) {
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit}>
+              <Select
+                onChange={handleSelectChange} // Call the handler when the select element changes
+                sx={{ mb: 4, minWidth: 100 }}
+              >
+                {flightData.map((flight) => (
+                  <MenuItem value={flight.id}>{flight.flightNumber}</MenuItem>
+                ))}
+              </Select>
               <Grid container sx={{ flexGrow: 1 }}>
                 <Grid container xs={12} rowGap={3}>
                   <TextField

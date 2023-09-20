@@ -231,8 +231,8 @@ const Flight = () => {
 
   const editInitialData = (id) => {
     const editingflight = flights.find((flight) => flight.id === id);
-    console.log(editingflight);
-    console.log(id);
+    // console.log(editingflight);
+    // console.log(id);
     if (id) {
       setInitialData({
         flightId: id,
@@ -298,7 +298,7 @@ const Flight = () => {
 
   const handleClose = (event, reason) => {
     if (reason === "backdropClick") {
-      console.log(reason);
+      // console.log(reason);
       return;
     } else {
       setOpenModal(false);
@@ -317,11 +317,11 @@ const Flight = () => {
     });
   }, []);
 
-  console.log("flights: ", flights);
+  // console.log("flights: ", flights);
 
   // Delete button function to remove a data row from the datagrid
   const handleDeleteClick = (id) => {
-    console.log("Deleting: ", id);
+    // console.log("Deleting: ", id);
     apiClient.deleteFlight(id).then((data) => {
       setFlights(flights.filter((flight) => flight.id !== id));
       reloadData();
@@ -509,7 +509,7 @@ const Flight = () => {
         type="submit"
         color="secondary"
         variant="contained"
-        onClick={() => console.log(flights)}
+        onClick={() => // console.log(flights)}
       >
         List Flight Table
       </Button> */}
@@ -586,6 +586,7 @@ const Flight = () => {
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           reloadData={reloadData}
+          flights={flights}
         ></FlightForm>
       </Modal>
 
