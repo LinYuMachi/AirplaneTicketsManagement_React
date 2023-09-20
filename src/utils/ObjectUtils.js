@@ -28,7 +28,7 @@ export default class ObjectUtils {
    *    return {
    *      "person": {
    *        "pet": {
-   *          "name: "Alice"
+   *          "name: "Bob"
    *        }
    *      }
    *    }
