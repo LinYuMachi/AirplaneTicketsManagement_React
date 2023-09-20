@@ -1,4 +1,15 @@
-import { Modal, Box, Typography, useTheme, Button } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataTeam, mockFlightData } from "../../data/mockData";
@@ -194,8 +205,12 @@ const Flight = () => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [deletionId, setDeletionId] = useState("");
+
   //Initalize data for form
   const [initialData, setInitialData] = useState({
+    flightId: "",
     flightNumber: "",
     origin: "",
     destination: "",
@@ -215,40 +230,78 @@ const Flight = () => {
   });
 
   const editInitialData = (id) => {
-    console.log(id);
     const editingflight = flights.find((flight) => flight.id === id);
     console.log(editingflight);
-    setInitialData({
-      flightNumber: editingflight.flightNumber,
-      origin: editingflight.origin,
-      destination: editingflight.destination,
-      departureDate: formatDate(editingflight.departureTime),
-      departureTime: formatTime(editingflight.departureTime),
-      arrivalTime: formatTime(editingflight.arrivalTime),
-      charterCost: editingflight.charterCost,
-      tax: editingflight.tax,
-      economyCount: editingflight.economyCount,
-      economyAdultPrice: editingflight.economyAdultPrice,
-      economyChildPrice: editingflight.economyChildPrice,
-      economyInfantPrice: editingflight.economyInfantPrice,
-      businessCount: editingflight.businessCount,
-      businessAdultPrice: editingflight.businessAdultPrice,
-      businessChildPrice: editingflight.businessChildPrice,
-      businessInfantPrice: editingflight.businessInfantPrice,
-    });
+    console.log(id);
+    if (id) {
+      setInitialData({
+        flightId: id,
+        flightNumber: editingflight.flightNumber,
+        origin: editingflight.origin,
+        destination: editingflight.destination,
+        departureDate: formatDate(editingflight.departureTime),
+        departureTime: formatTime(editingflight.departureTime),
+        arrivalTime: formatTime(editingflight.arrivalTime),
+        charterCost: editingflight.charterCost,
+        tax: editingflight.tax,
+        economyCount: editingflight.economyCount,
+        economyAdultPrice: editingflight.economyAdultPrice,
+        economyChildPrice: editingflight.economyChildPrice,
+        economyInfantPrice: editingflight.economyInfantPrice,
+        businessCount: editingflight.businessCount,
+        businessAdultPrice: editingflight.businessAdultPrice,
+        businessChildPrice: editingflight.businessChildPrice,
+        businessInfantPrice: editingflight.businessInfantPrice,
+      });
+    } else {
+      setInitialData({
+        flightId: "",
+        flightNumber: "",
+        origin: "",
+        destination: "",
+        departureDate: "",
+        departureTime: "",
+        arrivalTime: "",
+        charterCost: "",
+        tax: "",
+        economyCount: "",
+        economyAdultPrice: "",
+        economyChildPrice: "",
+        economyInfantPrice: "",
+        businessCount: "",
+        businessAdultPrice: "",
+        businessChildPrice: "",
+        businessInfantPrice: "",
+      });
+    }
   };
 
   //Flight entry modal open status
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  //Open deletion dialog
+  const [openDialog, setOpenDialog] = useState(false);
 
   //Handle flight modal open & close
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (id) => {
+    editInitialData(id);
+    setOpenModal(true);
+  };
+
+  //Handle warning modal open close
+  const handleWarningOpen = () => {
+    setOpenDialog(true);
+  };
+  const handleWarningClose = () => {
+    setOpenDialog(false);
+  };
+
   const handleClose = (event, reason) => {
     if (reason === "backdropClick") {
       console.log(reason);
       return;
     } else {
-      setOpen(false);
+      setOpenModal(false);
     }
   };
 
@@ -267,13 +320,21 @@ const Flight = () => {
   console.log("flights: ", flights);
 
   // Delete button function to remove a data row from the datagrid
-  const handleDeleteClick = (id) => () => {
-    console.log(id);
-    setFlights(flights.filter((flight) => flight.id !== id));
-    console.log(flights);
+  const handleDeleteClick = (id) => {
+    console.log("Deleting: ", id);
+    apiClient.deleteFlight(id).then((data) => {
+      setFlights(flights.filter((flight) => flight.id !== id));
+      reloadData();
+    });
   };
 
-  const reloadData = () => {};
+  const reloadData = () => {
+    setLoading(true);
+    apiClient.listFlights().then((data) => {
+      setFlights(data.flights);
+      setLoading(false);
+    });
+  };
 
   const columns = [
     {
@@ -421,13 +482,19 @@ const Flight = () => {
             <Button
               color="secondary"
               onClick={() => {
-                editInitialData(id);
-                handleOpen();
+                setIsUpdate(true);
+                handleOpen(id);
               }}
             >
               编辑
             </Button>
-            <Button color="error" onClick={handleDeleteClick(id)}>
+            <Button
+              color="error"
+              onClick={() => {
+                setDeletionId(id);
+                handleWarningOpen();
+              }}
+            >
               删除
             </Button>
           </div>
@@ -453,7 +520,9 @@ const Flight = () => {
           backgroundColor: colors.blueAccent[700],
           color: colors.grey[100],
         }}
-        onClick={handleOpen}
+        onClick={() => {
+          handleOpen();
+        }}
       >
         输入新航班
       </Button>
@@ -508,14 +577,38 @@ const Flight = () => {
           margin: "0 auto",
           padding: "16px",
         }}
-        open={open}
+        open={openModal}
         onClose={handleClose}
       >
         <FlightForm
           onClose={handleClose}
           initialValues={initialData}
+          isUpdate={isUpdate}
+          setIsUpdate={setIsUpdate}
+          reloadData={reloadData}
         ></FlightForm>
       </Modal>
+
+      <Dialog open={openDialog} onClose={handleWarningClose}>
+        <DialogTitle fontSize={20}>{"确定删除此航班吗？"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>删除之后无法复原航班信息</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleWarningClose}>
+            取消
+          </Button>
+          <Button
+            color="error"
+            onClick={() => {
+              handleDeleteClick(deletionId);
+              handleWarningClose();
+            }}
+          >
+            确定
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

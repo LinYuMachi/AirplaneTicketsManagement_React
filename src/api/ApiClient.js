@@ -24,11 +24,21 @@ export default class ApiClient {
     return this.client.get("/flight").then((resp) => resp.data);
   }
 
-  insertFlights(flight) {
+  insertFlight(flight) {
     return this.client
       .post("/flight", {
-        "flight": flight
+        flight: flight,
       })
       .then((resp) => resp.data);
+  }
+
+  updateFlight(flight, updatedFlight) {
+    return this.client
+      .put(`/flight/${flight}`, { flight: updatedFlight })
+      .then((resp) => {});
+  }
+
+  deleteFlight(flight) {
+    return this.client.delete(`/flight/${flight}`).then((resp) => {});
   }
 }

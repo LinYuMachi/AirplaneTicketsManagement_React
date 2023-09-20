@@ -28,8 +28,8 @@ export default function FlightForm(props) {
       destination: inputObject.destination.toUpperCase(), // Convert destination to uppercase
       departureTime: `${inputObject.departureDate}T${inputObject.departureTime}:00+02:00`, // Combine date and time
       arrivalTime: `${inputObject.departureDate}T${inputObject.arrivalTime}:00+02:00`, // Combine date and time
-      charterCost: inputObject.charterCost.toString(), // Convert to string
-      tax: inputObject.tax.toString(), // Convert to string
+      charterCost: inputObject.charterCost ? inputObject.charterCost.toString() : "", // Convert to string
+      tax: inputObject.tax ? inputObject.tax.toString() : "", // Convert to string
       economyCount: inputObject.economyCount.toString(), // Convert to string
       economyAdultPrice: inputObject.economyAdultPrice.toString(), // Convert to string
       economyChildPrice: inputObject.economyChildPrice.toString(), // Convert to string
@@ -39,13 +39,27 @@ export default function FlightForm(props) {
       businessChildPrice: inputObject.businessChildPrice.toString(), // Convert to string
       businessInfantPrice: inputObject.businessInfantPrice.toString(), // Convert to string
     };
-    console.log(inputObject);
-    console.log(outputObject);
-    apiClient.insertFlights(outputObject).then((resp) => {
-      console.log(resp);
-      setSubmitting(false);
-      props.onClose();
-    });
+    console.log("input: ", inputObject);
+    console.log("output: ", outputObject);
+
+    if (props.isUpdate === false) {
+      apiClient.insertFlight(outputObject).then((resp) => {
+        console.log(resp);
+        setSubmitting(false);
+        props.onClose();
+        props.reloadData();
+      });
+    }
+    else if (props.isUpdate === true) {
+      apiClient.updateFlight(inputObject.flightId, outputObject).then((resp) => {
+        console.log("updated");
+        setSubmitting(false);
+        props.onClose();
+        props.reloadData();
+      })
+    }
+
+    props.setIsUpdate(false);
     console.log("Successful!");
   };
 
@@ -66,6 +80,7 @@ export default function FlightForm(props) {
           overflow: "auto",
         }}
       >
+        {props.initialValues.flightId && <Typography>Flight ID: {props.initialValues.flightId}</Typography>}
         <Header title="输入新航班" subtitle="在这里输入航班" />
         <IconButton
           aria-label="close"
@@ -342,7 +357,10 @@ export default function FlightForm(props) {
                 <Stack direction="row" spacing={2}>
                   <Button
                     type="reset"
-                    onClick={props.onClose}
+                    onClick={() => {
+                      props.onClose();
+                      props.setIsUpdate(false);
+                    }}
                     color="error"
                     variant="contained"
                   >
@@ -356,7 +374,7 @@ export default function FlightForm(props) {
                     color="secondary"
                     variant="contained"
                   >
-                    录入
+                    保存
                   </Button>
                 </Stack>
               </Box>
@@ -392,6 +410,7 @@ const checkoutSchema = yup.object().shape({
   businessChildPrice: yup.string().required("required"),
   businessInfantPrice: yup.string().required("required"),
 });
+
 // const initialValues = {
 //   flightNumber: "",
 //   origin: "",
