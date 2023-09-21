@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import PermissionUtils from "../../utils/PermissionUtils";
 
-function Signup() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+function LogIn() {
+  const [username, setUsername] = useState('test2');
+  const [password, setPassword] = useState('Abcdef123!');
 
 
 
@@ -14,26 +14,23 @@ function Signup() {
         <input
             type="text"
             placeholder="Username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
         />
         <input
             type="password"
             placeholder="Password"
+            value={username}
             onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={() => PermissionUtils.signup(username, password)}>Sign Up</button>
         <button onClick={() => PermissionUtils.signIn(username, password)}>Sign In</button>
+        <button onClick={() => PermissionUtils.signout()}>Sign Out</button>
         <button onClick={() => {
-          Auth.currentSession().then(res=>{
-          let idToken = res.getIdToken()
-          let jwt = idToken.getJwtToken()
-
-          //You can print them to see the full objects
-          console.log(`idToken: ${JSON.stringify(idToken)}`)
-          console.log(`myJwt: ${jwt}`)
-        })}}>Get Token</button>
+          PermissionUtils.getToken().then(res => console.log(`${res}`))
+        }}>Get Token</button>
       </div>
   );
 }
 
-export default Signup;
+export default LogIn;

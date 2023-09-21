@@ -5,6 +5,7 @@ import {Button} from "@mui/material";
 export const ApiClientTest = () => {
   const apiClient = useContext(ApiContext);
   const [name, setName] = useState("");
+  const [id, setId] = useState("1234");
 
 
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -37,6 +38,13 @@ export const ApiClientTest = () => {
           <input type="text" value={name} onChange={(event) => setName(event.target.value)} />
           <Button type="submit" color="secondary" variant="contained" onClick={() => apiClient.insertTestTable(name).then(resp => console.log(resp))}>
             Insert into TestTable
+          </Button>
+        </div>
+        <div>
+          <p>id: </p>
+          <input type="text" value={id} onChange={(event) => setId(event.target.value)} />
+          <Button type="submit" color="secondary" variant="contained" onClick={() => apiClient.test(id).then(resp => console.log(resp))}>
+            Test
           </Button>
         </div>
         <div>

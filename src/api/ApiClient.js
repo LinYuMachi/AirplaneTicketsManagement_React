@@ -1,4 +1,5 @@
 import axios from "axios";
+import PermissionUtils from "../utils/PermissionUtils";
 
 export default class ApiClient {
   client;
@@ -10,46 +11,76 @@ export default class ApiClient {
     });
   }
 
-  listTestTable() {
-    return this.client.get("test/insert").then((resp) => resp.data);
-  }
-
-  insertTestTable(name) {
-    return this.client
-        .post("test/insert", {
-          name: name,
+  async send(method, url, data = {}, additionalHeaders = {}) {
+    return this.client({
+      method: method,
+      url: url,
+      data: data ?? {},
+      headers: {
+        Authorization: await PermissionUtils.getToken(),
+        ...additionalHeaders,
+      }
+    })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.data;
+          }
         })
-        .then((resp) => resp.data);
-  }
-
-  listFlights() {
-    return this.client.get("/flight").then((resp) => resp.data);
-  }
-
-  insertFlight(flight) {
-    return this.client
-        .post("/flight", {
-          flight: flight,
-        })
-        .then((resp) => resp.data);
-  }
-
-  updateFlight(flight, updatedFlight) {
-    return this.client
-        .put(`/flight/${flight}`, {flight: updatedFlight})
-        .then((resp) => {
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            PermissionUtils.redirectLogIn();
+          } else {
+            throw error;
+          }
         });
   }
 
+  async get(url, additionalHeaders = {}){
+    return this.send('get', url, {}, additionalHeaders)
+  }
+  async post(url, data = {}, additionalHeaders = {}){
+    return this.send('post', url, data, additionalHeaders)
+  }
+  async put(url, data = {}, additionalHeaders = {}){
+    return this.send('put', url, data, additionalHeaders)
+  }
+  async delete(url, additionalHeaders = {}){
+    return this.send('delete', url, {}, additionalHeaders)
+  }
+
+  test(id) {
+    return this.get(`/test/${id}`);
+  }
+
+  listTestTable() {
+    return this.get("test/insert");
+  }
+
+  insertTestTable(name) {
+    return this.post("test/insert", {
+          name: name,
+        });
+  }
+
+  listFlights() {
+    return this.get("/flight");
+  }
+
+  insertFlight(flight) {
+    return this.post("/flight", {
+          flight: flight,
+        });
+  }
+
+  updateFlight(flight, updatedFlight) {
+    return this.put(`/flight/${flight}`, {flight: updatedFlight});
+  }
+
   deleteFlight(flight) {
-    return this.client.delete(`/flight/${flight}`).then((resp) => {
-    });
+    return this.delete(`/flight/${flight}`);
   }
 
   uploadPassportImage(extension, image) {
-    return this.client.post('upload/passport', {
-      "extension": extension,
-      "image": image
-    }).then(resp => resp.data);
+    return this.post('upload/passport');
   }
 }
