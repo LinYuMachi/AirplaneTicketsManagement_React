@@ -5,23 +5,21 @@ import Topbar from "./scenes/global/Topbar";
 import Dashboard from "./scenes/dashboard";
 import Sidebar from "./scenes/global/Sidebar";
 import Team from "./scenes/team";
-// import Invoices from "./scenes/invoices";
 import Tickets from "./scenes/tickets";
-// import Bar from "./scenes/bar";
-import Form from "./scenes/form";
 import ApiClient from "./api/ApiClient";
 import {ApiClientTest} from "./scenes/test/ApiClientTest";
 import React from 'react';
 import MockApiClient from "./api/MockApiClient";
 import Flight from "./scenes/flight";
-// import Line from "./scenes/line";
-// import Pie from "./scenes/pie";
-// import FAQ from "./scenes/faq";
-// import Geography from "./scenes/geography";
-// import Calendar from "./scenes/calendar";
+import {TestCreateFlight} from "./scenes/test/test-create-flight";
+import {createContext} from "react";
+import Signup from "./scenes/login/signup";
+import aws_exports from './aws-exports';
+import {Amplify} from "aws-amplify";
 
 export const ApiContext = React.createContext({});
 const apiClient = process.env.REACT_APP_IS_MOCK === 'true' ? new MockApiClient() : new ApiClient();
+Amplify.configure(aws_exports);
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -41,14 +39,8 @@ function App() {
                 <Route path="/tickets" element={<Tickets/>} />
                 <Route path="/test" element={<ApiClientTest/>} />
                 <Route path="/flights" element={<Flight/>} />
-                {/* <Route path="/invoices" element={<Invoices/>} /> */}
-                {/* <Route path="/form" element={<Form/>} /> */}
-                {/* <Route path="/bar" element={<Bar/>} /> */}
-                {/* <Route path="/pie" element={<Pie/>} /> */}
-                {/* <Route path="/line" element={<Line/>} /> */}
-                {/* <Route path="/faq" element={<FAQ/>} /> */}
-                {/* <Route path="/geography" element={<Geography/>} /> */}
-                {/* <Route path="/calendar" element={<Calendar/>} /> */}
+                <Route path="/flight/create" element={<TestCreateFlight/>} />
+                <Route path="/signup" element={<Signup/>} />
               </Routes>
             </main>
           </div>
