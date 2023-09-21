@@ -9,6 +9,11 @@ import Tickets from "./scenes/tickets";
 import {CreateFlight} from "./scenes/flight/create-flight";
 import ApiClient from "./api/ApiClient";
 import {createContext} from "react";
+import Signup from "./scenes/login/signup";
+import aws_exports from './aws-exports';
+import {Amplify} from "aws-amplify";
+
+Amplify.configure(aws_exports);
 
 export const ApiContext = createContext({});
 const apiClient = new ApiClient();
@@ -30,6 +35,7 @@ function App() {
                 <Route path="/team" element={<Team/>} />
                 <Route path="/tickets" element={<Tickets/>} />
                 <Route path="/flight/create" element={<CreateFlight/>} />
+                <Route path="/signup" element={<Signup/>} />
                 {/* <Route path="/invoices" element={<Invoices/>} /> */}
                 {/* <Route path="/form" element={<Form/>} /> */}
                 {/* <Route path="/bar" element={<Bar/>} /> */}

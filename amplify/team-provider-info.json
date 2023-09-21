@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-airplaneticketsmanag-dev-223231-authRole",
+      "UnauthRoleArn": "arn:aws:iam::233792370434:role/amplify-airplaneticketsmanag-dev-223231-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::233792370434:role/amplify-airplaneticketsmanag-dev-223231-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-airplaneticketsmanag-dev-223231-deployment",
+      "UnauthRoleName": "amplify-airplaneticketsmanag-dev-223231-unauthRole",
+      "StackName": "amplify-airplaneticketsmanag-dev-223231",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:233792370434:stack/amplify-airplaneticketsmanag-dev-223231/1abd4380-5777-11ee-a3eb-06ca2b3e19b0",
+      "AmplifyAppId": "d2lvcb6vs7qe0k"
+    },
+    "categories": {
+      "auth": {
+        "airplaneticketsmanagcb2aea5f": {
+          "userPoolId": "ap-southeast-2_putvEszrq",
+          "userPoolName": "UserPool6BA7E5F2-0usNJBCP4ctt",
+          "webClientId": "59iuscnfqkfhpuon526d4m72ck",
+          "nativeClientId": "59iuscnfqkfhpuon526d4m72ck"
+        }
+      }
+    }
+  }
+}

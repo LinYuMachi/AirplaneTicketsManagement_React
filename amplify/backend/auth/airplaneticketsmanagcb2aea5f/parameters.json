@@ -1,0 +1,17 @@
+{
+  "authSelections": "userPoolOnly",
+  "resourceName": "airplaneticketsmanagcb2aea5f",
+  "serviceType": "imported",
+  "region": "ap-southeast-2",
+  "authProvidersUserPool": [],
+  "requiredAttributes": [],
+  "passwordPolicyMinLength": 8,
+  "passwordPolicyCharacters": [
+    "Requires Lowercase",
+    "Requires Uppercase",
+    "Requires Numbers",
+    "Requires Symbols"
+  ],
+  "mfaConfiguration": "OFF",
+  "mfaTypes": []
+}

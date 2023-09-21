@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "airplaneticketsmanagcb2aea5f": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_airplaneticketsmanagcb2aea5f_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "airplaneticketsmanagcb2aea5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_airplaneticketsmanagcb2aea5f_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "airplaneticketsmanagcb2aea5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_airplaneticketsmanagcb2aea5f_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "airplaneticketsmanagcb2aea5f"
+        }
+      ]
+    },
+    "AMPLIFY_auth_airplaneticketsmanagcb2aea5f_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "airplaneticketsmanagcb2aea5f"
+        }
+      ]
+    }
+  }
+}
