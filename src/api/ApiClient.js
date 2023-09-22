@@ -49,7 +49,7 @@ export default class ApiClient {
   }
 
   test(id) {
-    return this.get(`/test/${id}`);
+    return this.get(`test/${id}`);
   }
 
   listTestTable() {
@@ -82,5 +82,12 @@ export default class ApiClient {
 
   uploadPassportImage(extension, image) {
     return this.post('upload/passport');
+  }
+
+  signUp(username, password) {
+    return this.post('signup', {
+      username: username,
+      password: password,
+    })
   }
 }

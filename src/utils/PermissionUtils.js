@@ -15,9 +15,6 @@ export default class PermissionUtils {
       await Auth.signUp({
         username,
         password,
-        autoSignIn: {
-          enabled: true,
-        }
       });
       console.log('Sign-up successful');
     } catch (error) {
@@ -55,15 +52,25 @@ export default class PermissionUtils {
     window.location.href = "http://localhost:3000/test";
   }
 
-  static listenPermissionEvents() {
+  static listenPermissionEvents(setUsername = undefined) {
     Hub.listen('auth', ({ payload }) => {
       const { event } = payload;
       console.log(event);
       if (event === 'signIn' || event === 'autoSignIn') {
+        if (setUsername !== undefined) this.getUsername().then(username => setUsername(username))
         PermissionUtils.redirectHomePage();
       } else if (event === 'signOut') {
         PermissionUtils.redirectLogIn();
       }
     })
+  }
+
+  static async getUsername() {
+    return Auth.currentAuthenticatedUser().then(user => user.username)
+        .catch(error => {
+          // Handle errors if the user is not authenticated
+          console.error('Error fetching user:', error);
+          return ""
+        });
   }
 }

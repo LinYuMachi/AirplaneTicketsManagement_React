@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import PermissionUtils from "../../utils/PermissionUtils";
+import ApiClient from "../../api/ApiClient";
+import {ApiContext} from "../../App";
 
 function LogIn() {
   const [username, setUsername] = useState('test2');
   const [password, setPassword] = useState('Abcdef123!');
 
-
+  const apiClient = useContext(ApiContext);
 
   return (
       <div>
@@ -23,7 +25,7 @@ function LogIn() {
             value={username}
             onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={() => PermissionUtils.signup(username, password)}>Sign Up</button>
+        <button onClick={() => apiClient.signUp(username, password).then(() => console.log("Sign-up successful"))}>Sign Up</button>
         <button onClick={() => PermissionUtils.signIn(username, password)}>Sign In</button>
         <button onClick={() => PermissionUtils.signout()}>Sign Out</button>
         <button onClick={() => {
