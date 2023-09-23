@@ -12,10 +12,12 @@ import React, {useEffect, useState} from 'react';
 import MockApiClient from "./api/MockApiClient";
 import Flight from "./scenes/flight";
 import {TestCreateFlight} from "./scenes/test/test-create-flight";
-import LogIn from "./scenes/login/logIn";
+import SignIn from "./scenes/login/SignIn";
 import aws_exports from './aws-exports';
 import {Amplify, Auth} from "aws-amplify";
 import PermissionUtils from "./utils/PermissionUtils";
+import {Admin} from "./scenes/admin/Admin";
+import SignUp from "./scenes/login/SignUp";
 
 export const ApiContext = React.createContext({});
 const apiClient = process.env.REACT_APP_IS_MOCK === 'true' ? new MockApiClient() : new ApiClient();
@@ -68,8 +70,10 @@ function App() {
                   <Route path="/test" element={<ApiClientTest/>} />
                   <Route path="/flights" element={<Flight/>} />
                   <Route path="/flight/create" element={<TestCreateFlight/>} />
+                  <Route path="/signup" element={<SignUp/>} />
+                  <Route path="/admin" element={<Admin/>} />
                 </Route>
-                <Route path="/login" element={<LogIn/>} />
+                <Route path="/signin" element={<SignIn/>} />
               </Routes>
           </div>
         </ApiContext.Provider>

@@ -1,22 +1,17 @@
 import {useEffect, useState} from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import {Box, Button, IconButton, Typography, useTheme} from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContentPasteSearchOutlinedIcon from '@mui/icons-material/ContentPasteSearchOutlined';
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import AirplaneTicketOutlinedIcon from '@mui/icons-material/AirplaneTicketOutlined';
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlinedIcon from "@mui/icons-material/PieChartOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import PermissionUtils from "../../utils/PermissionUtils";
+import {ExitToApp} from "@mui/icons-material";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -85,9 +80,6 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  牛
-                </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
@@ -98,16 +90,6 @@ const Sidebar = () => {
           {/* USER */}
           {!isCollapsed && (
             <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <img
-                  alt="profile-user"
-                  width="100px"
-                  height="100px"
-                  src={`../../assets/user.png`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
-                />
-              </Box>
-
               <Box textAlign="center">
                 <Typography
                   variant="h2"
@@ -117,9 +99,14 @@ const Sidebar = () => {
                 >
                   {username}
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  管理员
-                </Typography>
+                <Button
+                    variant="text"
+                    color="secondary"
+                    startIcon={<ExitToApp />}
+                    onClick={() => PermissionUtils.signOut()}
+                >
+                  退出登录
+                </Button>
               </Box>
             </Box>
           )}
@@ -134,15 +121,13 @@ const Sidebar = () => {
                 setSelected={setSelected}
             />
 
-{/***  Later Implementation to set check user level to display team data  ****/}
-
-            <Typography
+            {!isCollapsed && <Typography
                 variant="h6"
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
                 用户
-            </Typography>
+            </Typography>}
 
             <Item
                 title="管理用户"
@@ -151,34 +136,20 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-            {/*<Item
-                title="Contacts Information"
-                to="/contacts"
-                icon={<ContactsOutlinedIcon />}
+            <Item
+                title="添加用户"
+                to="/signup"
+                icon={<PersonAddAltIcon />}
                 selected={selected}
                 setSelected={setSelected}
             />
-            <Item
-                title="Invoices Balances"
-                to="/invoices"
-                icon={<ReceiptOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            /> */}
-            <Typography
+            {!isCollapsed && <Typography
                 variant="h6"
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px"}}
             >
                 航班/订单
-            </Typography>
-            {/* <Item
-                title="Entry Form"
-                to="/form"
-                icon={<AirplaneTicketOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            /> */}
+            </Typography>}
             <Item
                 title="管理航班"
                 to="/flights"
@@ -193,56 +164,6 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
             />
-            {/* <Item
-                title="Calendar"
-                to="/calendar"
-                icon={<CalendarMonthOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-            <Item
-                title="FAQ"
-                to="/faq"
-                icon={<HelpOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            /> */}
-            <Typography
-                variant="h6"
-                color={colors.grey[300]}
-                sx={{ m: "15px 0 5px 20px"}}
-            >
-                图表
-            </Typography>
-            <Item
-                title="Bar Chart"
-                to="/bar"
-                icon={<BarChartOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-            <Item
-                title="Pie Chart"
-                to="/pie"
-                icon={<PieChartOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-            <Item
-                title="Line Chart"
-                to="/line"
-                icon={<TimelineOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-            <Item
-                title="Geography Chart"
-                to="/geography"
-                icon={<MapOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-            />
-
           </Box>
         </Menu>
       </ProSidebar>

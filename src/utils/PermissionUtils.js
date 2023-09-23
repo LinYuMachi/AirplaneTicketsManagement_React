@@ -1,28 +1,64 @@
 import {Auth, Hub} from "aws-amplify";
 
 export default class PermissionUtils {
+  static parseError(errorName) {
+    console.log(errorName);
+    let errorMessage;
+    switch (errorName) {
+      case 'UserNotFoundException':
+        errorMessage = '用户不存在。请检查用户名。';
+        break;
+      case 'NotAuthorizedException':
+        errorMessage = '密码错误。请重试。';
+        break;
+      case 'PasswordResetRequiredException':
+        errorMessage = '请重置密码。';
+        break;
+      case 'UserNotConfirmedException':
+        errorMessage = '注册未确认。请联系管理员。';
+        break;
+      case 'CodeMismatchException':
+        errorMessage = '确认码错误。请重试。';
+        break;
+      case 'ExpiredCodeException':
+        errorMessage = '确认码过期。请在发送确认码。';
+        break;
+      case 'InvalidParameterException':
+        errorMessage = '无效输入。请确认用户名和密码。';
+        break;
+      case 'InvalidPasswordException':
+        errorMessage = '密码不符合标准。请修改密码。';
+        break;
+      case 'TooManyFailedAttemptsException':
+        errorMessage = '失败次数过多。请等待并重试。';
+        break;
+      case 'TooManyRequestsException':
+        errorMessage = '请求次数到达上限。请等待并重试';
+        break;
+      case 'LimitExceededException':
+        errorMessage = '用户池已满。请联系管理员。';
+        break;
+      case 'UsernameExistsException':
+        errorMessage = '用户名已存在。请输入别的用户名。';
+        break;
+      default:
+        errorMessage = '未知错误。请联系管理员。';
+    }
+    return errorMessage;
+}
   static async signIn(username, password) {
-    try {
-      const user = await Auth.signIn(username, password);
-      console.log('Sign-in successful');
-    } catch (error) {
-      console.log('error signing in', error);
-    }
+    await Auth.signIn(username, password);
   }
 
-  static async signup(username, password) {
-    try {
-      await Auth.signUp({
-        username,
-        password,
-      });
-      console.log('Sign-up successful');
-    } catch (error) {
-      console.error('Error signing up:', error);
-    }
+  static async signUp(username, password) {
+    const currentUser = this.getUsername();
+    await Auth.signUp({
+      username,
+      password,
+    });
   }
 
-  static async signout() {
+  static async signOut() {
     try {
       await Auth.signOut();
     } catch (error) {
@@ -37,11 +73,11 @@ export default class PermissionUtils {
   }
 
   static navigateLogIn(navigate) {
-    navigate("/login")
+    navigate("/signin")
   }
 
   static redirectLogIn() {
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = "http://localhost:3000/signin";
   }
 
   static navigateHomePage(navigate) {
@@ -55,7 +91,6 @@ export default class PermissionUtils {
   static listenPermissionEvents(setUsername = undefined) {
     Hub.listen('auth', ({ payload }) => {
       const { event } = payload;
-      console.log(event);
       if (event === 'signIn' || event === 'autoSignIn') {
         if (setUsername !== undefined) this.getUsername().then(username => setUsername(username))
         PermissionUtils.redirectHomePage();
