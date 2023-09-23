@@ -61,11 +61,11 @@ function App() {
           <CssBaseline />
           <div className="app">
               <Routes>
-                <Route element={<SidebarLayout/>}>
+                <Route element={<RequireAuth><SidebarLayout/></RequireAuth>}>
                   <Route path="/" element={<Dashboard/>} />
                   <Route path="/team" element={<Team/>} />
                   <Route path="/tickets" element={<Tickets/>} />
-                  <Route path="/test" element={<RequireAuth><ApiClientTest/></RequireAuth>} />
+                  <Route path="/test" element={<ApiClientTest/>} />
                   <Route path="/flights" element={<Flight/>} />
                   <Route path="/flight/create" element={<TestCreateFlight/>} />
                 </Route>
