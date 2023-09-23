@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { styled } from '@mui/material/styles';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -14,33 +14,92 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Autocomplete,
 } from "@mui/material";
-import { useRef } from "react";
+import { useRef, useState, useContext } from "react";
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+// API imports
+import { ApiContext } from "../../App";
+import { useParams } from "react-router-dom";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 
 export default function Ticket(props) {
+  const apiClient = useContext(ApiContext);
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
-  const [trip, setTrip] = React.useState("oneway");
-  const [gender, setGender] = React.useState("male");
+  const [isOneway, setIsOneway] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // API call to retrieve flight data flight agency data
+  const [flights, setFlights] = useState([]);
+  const [flightAgencies, setFlightAgencies] = useState([]);
+
+  // Autocomplete labels
+  const [agencyOptions, setAgencyOptions] = useState([]);
+  const [flightOptions, setFlightOptions] = useState([]);
+
+  // Keep tracks of returnFlight displaying value
+  const [returnFlightValue, setReturnFlightValue] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    apiClient.listFlights().then((data) => {
+      setFlights(data.flights);
+      // Autocomplete labels
+      setFlightOptions(
+        data.flights.map((flight) => ({ label: flight.flightNumber }))
+      );
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    apiClient.listFlightAgencies().then((data) => {
+      setFlightAgencies(data.flightAgencies);
+      // Autocomplete labels
+      setAgencyOptions(
+        data.flightAgencies.map((agency) => ({ label: agency.name }))
+      );
+      setLoading(false);
+    });
+  }, []);
+
+  const handleAutocompleteChange = (e, values) => {
+    if (formikRef.current) {
+      formikRef.current.setFieldValue(
+        "returnFlight",
+        values.label
+      );
+      setReturnFlightValue(values.label)
+    }
+  }
+
   const formikRef = useRef();
+
+  const onSubmit = (values) => {
+    console.log(values);
+    props.closeModal();
+  };
 
   return (
     <>
       <Formik
         innerRef={formikRef}
-        onSubmit={props.handleFormSubmit}
+        onSubmit={onSubmit}
         initialValues={initialValues}
         validationSchema={checkoutSchema}
       >
@@ -56,80 +115,116 @@ export default function Ticket(props) {
             <Box
               display="grid"
               gap="30px"
-              gridTemplateColumns="repeat(8, minmax(0, 1fr))"
+              gridTemplateColumns="repeat(3, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                overflow: "auto",
+                maxHeight: "80vh",
               }}
             >
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="代理名称"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.agentName}
-                name="agentName"
-                error={!!touched.agentName && !!errors.agentName}
-                helperText={touched.agentName && errors.agentName}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <Select
-                labelId="trip-select-label"
-                id="trip-select"
-                value={trip}
-                label="Trip"
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setTrip(e.target.value);
+              <Autocomplete
+                options={agencyOptions}
+                sx={{ gridColumn: "span 1" }}
+                renderInput={(params) => (
+                  <TextField {...params} label="代理名称" />
+                )}
+                onChange={(e, value) => {
+                  if (value === null) {
+                    value = { label: "" };
+                  }
                   if (formikRef.current) {
-                    formikRef.current.setFieldValue("triptype", e.target.value);
+                    formikRef.current.setFieldValue("agencyName", value.label);
                   }
                 }}
-                name="triptype"
-                sx={{ gridColumn: "span 2" }}
-              >
-                <MenuItem value={"oneway"}>单程</MenuItem>
-                <MenuItem value={"roundtrip"}>往返</MenuItem>
-              </Select>
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="去程航班"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.departureFlight}
-                name="departureFlight"
-                error={!!touched.departureFlight && !!errors.departureFlight}
-                helperText={touched.departureFlight && errors.departureFlight}
-                sx={{ gridColumn: "span 2" }}
+                loading
               />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="回程航班"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.returnFlight}
-                name="returnFlight"
-                error={!!touched.returnFlight && !!errors.returnFlight}
-                helperText={touched.returnFlight && errors.returnFlight}
-                sx={{ gridColumn: "span 2" }}
+              <FormControl>
+                <InputLabel id="trip-select-label">行程</InputLabel>
+                <Select
+                  labelId="trip-select-label"
+                  value={values.triptype}
+                  onChange={(e) => {
+                    if (formikRef.current) {
+                      formikRef.current.setFieldValue(
+                        "triptype",
+                        e.target.value
+                      );
+                    }
+                    if (e.target.value === "oneway") {
+                      formikRef.current.setFieldValue("returnFlight", "");
+                      setIsOneway(true);
+                      setReturnFlightValue("");
+                    } else if (e.target.value === "roundtrip") {
+                      setIsOneway(false);
+                    }
+                  }}
+                  name="triptype"
+                >
+                  <MenuItem value={"oneway"}>单程</MenuItem>
+                  <MenuItem value={"roundtrip"}>往返</MenuItem>
+                </Select>
+              </FormControl>
+              <Autocomplete
+                options={flightOptions}
+                sx={{ gridColumn: "span 1" }}
+                renderInput={(params) => (
+                  <TextField {...params} label="去程航班" />
+                )}
+                onChange={(e, value) => {
+                  if (value === null) {
+                    value = { label: "" };
+                  }
+                  if (formikRef.current) {
+                    formikRef.current.setFieldValue(
+                      "departureFlight",
+                      value.label
+                    );
+                  }
+                }}
               />
+              <Autocomplete
+                options={flightOptions}
+                sx={{ gridColumn: "span 1" }}
+                renderInput={(params) => (
+                  <TextField {...params} label="回程航班" />
+                )}
+                onChange={handleAutocompleteChange}
+                disabled={isOneway}
+                value={returnFlightValue}
+              />
+              <FormControl>
+                <InputLabel id="ticket-class-select-label">舱位</InputLabel>
+                <Select
+                  labelId="ticket-class-select-label"
+                  value={values.ticketClass}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    if (formikRef.current) {
+                      formikRef.current.setFieldValue(
+                        "ticketClass",
+                        e.target.value
+                      );
+                    }
+                  }}
+                  name="ticketClass"
+                  sx={{ gridColumn: "span 1" }}
+                >
+                  <MenuItem value={"economy"}>经济舱</MenuItem>
+                  <MenuItem value={"business"}>商务舱</MenuItem>
+                </Select>
+              </FormControl>
               <TextField
                 fullWidth
                 variant="filled"
-                type="text"
-                label="舱位等级"
+                type="number"
+                label="结算价格"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.ticketClass}
-                name="ticketClass"
-                error={!!touched.ticketClass && !!errors.ticketClass}
-                helperText={touched.ticketClass && errors.ticketClass}
-                sx={{ gridColumn: "span 2" }}
+                value={values.price}
+                name="price"
+                error={!!touched.price && !!errors.price}
+                helperText={touched.price && errors.price}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -142,20 +237,7 @@ export default function Ticket(props) {
                 name="infantAdult"
                 error={!!touched.infantAdult && !!errors.infantAdult}
                 helperText={touched.infantAdult && errors.infantAdult}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="number"
-                label="结算价格"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.price}
-                name="price"
-                error={!!touched.price && !!errors.price}
-                helperText={touched.price && errors.price}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -168,7 +250,7 @@ export default function Ticket(props) {
                 name="chineseLastname"
                 error={!!touched.chineseLastname && !!errors.chineseLastname}
                 helperText={touched.chineseLastname && errors.chineseLastname}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -177,11 +259,11 @@ export default function Ticket(props) {
                 label="中文名"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.chinesefirstName}
-                name="chinesefirstName"
-                error={!!touched.chinesefirstName && !!errors.chinesefirstName}
-                helperText={touched.chinesefirstName && errors.chinesefirstName}
-                sx={{ gridColumn: "span 2" }}
+                value={values.chineseFirstname}
+                name="chineseFirstname"
+                error={!!touched.chineseFirstname && !!errors.chineseFirstname}
+                helperText={touched.chineseFirstname && errors.chineseFirstname}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -194,7 +276,7 @@ export default function Ticket(props) {
                 name="englishLastname"
                 error={!!touched.englishLastname && !!errors.englishLastname}
                 helperText={touched.englishLastname && errors.englishLastname}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -207,16 +289,15 @@ export default function Ticket(props) {
                 name="englishFirstname"
                 error={!!touched.englishFirstname && !!errors.englishFirstname}
                 helperText={touched.englishFirstname && errors.englishFirstname}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <RadioGroup
                 row
                 name="gender"
                 value={values.gender}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
                 onChange={(e) => {
-                  console.log(e.target.value);
-                  setGender(e.target.value);
+                  console.log(values);
                   if (formikRef.current) {
                     formikRef.current.setFieldValue("gender", e.target.value);
                   }
@@ -243,7 +324,7 @@ export default function Ticket(props) {
                 name="birthDate"
                 error={!!touched.birthDate && !!errors.birthDate}
                 helperText={touched.birthDate && errors.birthDate}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -256,7 +337,7 @@ export default function Ticket(props) {
                 name="nationality"
                 error={!!touched.nationality && !!errors.nationality}
                 helperText={touched.nationality && errors.nationality}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -269,7 +350,7 @@ export default function Ticket(props) {
                 name="birthPlace"
                 error={!!touched.birthPlace && !!errors.birthPlace}
                 helperText={touched.birthPlace && errors.birthPlace}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -282,7 +363,7 @@ export default function Ticket(props) {
                 name="placeOfIssue"
                 error={!!touched.placeOfIssue && !!errors.placeOfIssue}
                 helperText={touched.placeOfIssue && errors.placeOfIssue}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -295,7 +376,7 @@ export default function Ticket(props) {
                 name="documentType"
                 error={!!touched.documentType && !!errors.documentType}
                 helperText={touched.documentType && errors.documentType}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -308,7 +389,7 @@ export default function Ticket(props) {
                 name="passportNumber"
                 error={!!touched.passportNumber && !!errors.passportNumber}
                 helperText={touched.passportNumber && errors.passportNumber}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -324,7 +405,7 @@ export default function Ticket(props) {
                 name="dateOfIssue"
                 error={!!touched.dateOfIssue && !!errors.dateOfIssue}
                 helperText={touched.dateOfIssue && errors.dateOfIssue}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <TextField
                 fullWidth
@@ -340,13 +421,13 @@ export default function Ticket(props) {
                 name="validUntil"
                 error={!!touched.validUntil && !!errors.validUntil}
                 helperText={touched.validUntil && errors.validUntil}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               />
               <Button
                 component="label"
                 variant="contained"
                 startIcon={<CloudUploadIcon />}
-                sx={{ gridColumn: "span 2" }}
+                sx={{ gridColumn: "span 1" }}
               >
                 护照原件上传
                 <VisuallyHiddenInput type="file" />
@@ -382,9 +463,14 @@ const englishRegex = /^[A-Za-z]+$/;
 const chineseRegex = /[\u4e00-\u9fa5]/;
 
 const checkoutSchema = yup.object().shape({
-  agentName: yup.string().required(),
+  agencyName: yup.string().required(),
+  triptype: yup.string().required(),
   departureFlight: yup.string().required(),
-  returnFlight: yup.string().required(),
+  returnFlight: yup.string().when("triptype", {
+    is: (triptype) => triptype === "roundtrip",
+    then: () => yup.string().required(),
+    otherwise: () => yup.string().notRequired(),
+  }),
   ticketClass: yup.string().required(),
   price: yup.number().required(),
   chineseLastname: yup
@@ -411,8 +497,8 @@ const checkoutSchema = yup.object().shape({
 });
 
 const initialValues = {
-  triptype: "oneway",
-  agentName: "",
+  triptype: "",
+  agencyName: "",
   departureFlight: "",
   returnFlight: "",
   infantAdult: "",
@@ -422,7 +508,7 @@ const initialValues = {
   chineseFirstname: "",
   englishLastname: "",
   englishFirstname: "",
-  gender: "male",
+  gender: "",
   birthDate: "",
   nationality: "",
   birthPlace: "",

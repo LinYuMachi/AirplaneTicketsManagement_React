@@ -1,7 +1,7 @@
 import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import Header from "../../components/Header";
 import Ticket from "../../components/forms/ticket";
 import TicketVisaHousing from "../../components/forms/ticketvisahousing";
@@ -16,17 +16,14 @@ import Upgrade from "../../components/forms/upgrade";
 import Loss from "../../components/forms/loss";
 import Other from "../../components/forms/other";
 
+
 const Form = (props) => {
+
   const [form, setForm] = useState("ticket");
 
   const handleFormChange = (e) => {
     console.log(e.target.value);
     setForm(e.target.value);
-  };
-
-  const handleFormSubmit = (values) => {
-    console.log(values);
-    props.onClose();
   };
 
   return (
@@ -84,31 +81,31 @@ const Form = (props) => {
       {(() => {
         switch (form) {
           case "ticket":
-            return <Ticket handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Ticket closeModal={props.onClose}/>;
           case "ticketvisahousing":
-            return <TicketVisaHousing handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <TicketVisaHousing closeModal={props.onClose}/>;
           case "ticketvisa":
-            return <TicketVisa handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <TicketVisa closeModal={props.onClose}/>;
           case "tickethousing":
-            return <TicketHousing handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <TicketHousing closeModal={props.onClose}/>;
           case "visa":
-            return <Visa handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Visa closeModal={props.onClose}/>;
           case "housing":
-            return <Housing handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Housing closeModal={props.onClose}/>;
           case "housingdiff":
-            return <HousingDiff handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <HousingDiff closeModal={props.onClose}/>;
           case "reschedule":
-            return <Reschedule handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Reschedule closeModal={props.onClose}/>;
           case "substitution":
-            return <Substitution handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Substitution closeModal={props.onClose}/>;
           case "upgrade":
-            return <Upgrade handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Upgrade closeModal={props.onClose}/>;
           case "loss":
-            return <Loss handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Loss closeModal={props.onClose}/>;
           case "other":
-            return <Other handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Other closeModal={props.onClose}/>;
           default:
-            return <Ticket handleFormSubmit={handleFormSubmit} closeModal={props.onClose}/>;
+            return <Ticket closeModal={props.onClose}/>;
         }
       })()}
     </Box>
