@@ -80,6 +80,10 @@ export default class ApiClient {
     return this.delete(`/flight/${flight}`);
   }
 
+  listFlightAgencies() {
+    return this.get("/flightAgency");
+  }
+
   uploadPassportImage(extension, image) {
     return this.post('upload/passport');
   }
