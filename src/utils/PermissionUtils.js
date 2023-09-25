@@ -57,7 +57,10 @@ export default class PermissionUtils {
       attributes: {
         name: name,
         "custom:phone": phone,
-        "custom:parentAccount": currentUser
+        "custom:parentAccount": currentUser,
+      },
+      clientMetadata: {
+        currUser: currentUser,
       },
     });
   }
