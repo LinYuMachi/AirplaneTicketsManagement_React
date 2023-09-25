@@ -24,10 +24,12 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { v4 as uuid } from 'uuid';
+import ContactPhoneOutlinedIcon from '@mui/icons-material/ContactPhoneOutlined';
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import PermissionUtils from "../../utils/PermissionUtils";
+import ObjectUtils from "../../utils/ObjectUtils";
 
 const containerStyle = {
   display: 'flex',
@@ -50,6 +52,9 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    confirmPassword: '',
+    name: '',
+    phone: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -64,19 +69,21 @@ const SignUp = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isUserNameTouched, setIsUserNameTouched] = useState(false);
-  const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+  const [isTouched, setIsTouched] = useState({
+    username: false,
+    password: false,
+    confirmPassword: false,
+    name: false,
+    phone: false,
+  });
   const [copySuccess, setCopySuccess] = useState(false); // Added state for copy success
-  const [componentKey, setComponentKey] = useState(uuid());
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+    setIsTouched(ObjectUtils.assignProperty(isTouched, true, name));
     if (name === 'password') {
-      setIsPasswordTouched(true);
       validatePassword(value);
-    } else if (name === 'username') {
-      setIsUserNameTouched(true);
     }
   };
 
@@ -112,7 +119,7 @@ const SignUp = () => {
   };
 
   const handleGeneratePassword = () => {
-    setIsPasswordTouched(true);
+    setIsTouched(ObjectUtils.assignProperty(isTouched, true, 'password'));
     let newPassword;
     let attempts = 0;
     const maxAttempts = 100; // Set a limit to the number of attempts
@@ -152,10 +159,11 @@ const SignUp = () => {
         setLoading(false);
         return;
       }
-      await PermissionUtils.signUp(formData.username, formData.password)
+      await PermissionUtils.signUp(formData.username, formData.password, formData.name, formData.phone)
       setSuccess('注册成功! 请注意保存密码。');
       setError(null);
     } catch (err) {
+      console.log(err);
       setError(`注册失败。${err?.name ? PermissionUtils.parseError(err.name) : ''}`);
     } finally {
       setLoading(false);
@@ -163,7 +171,7 @@ const SignUp = () => {
   };
 
   return (
-      <Container maxWidth="sm" key={componentKey}>
+      <Container maxWidth="sm">
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
           <AccountCircleOutlinedIcon style={{ fontSize: 60 }} />
           <Typography variant="h5" component="h2">
@@ -180,12 +188,48 @@ const SignUp = () => {
               name="username"
               value={formData.username}
               onChange={handleInputChange}
-              error={isUserNameTouched && !formData.username}
-              helperText={isUserNameTouched && !formData.username ? '用户名不能为空' : ''}
+              error={isTouched.username && !formData.username}
+              helperText={isTouched.username && !formData.username ? '用户名不能为空' : ''}
               disabled={!!success}
               InputProps={{
                 startAdornment: (
                     <AccountCircleOutlinedIcon style={{ marginRight: '8px' }} />
+                ),
+              }}
+          />
+          <TextField
+              fullWidth
+              margin="normal"
+              label="姓名"
+              placeholder="请输入姓名"
+              variant="outlined"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              error={isTouched.name && !formData.name}
+              helperText={isTouched.name && !formData.name ? '姓名不能为空' : ''}
+              disabled={!!success}
+              InputProps={{
+                startAdornment: (
+                    <BadgeOutlinedIcon style={{ marginRight: '8px' }} />
+                ),
+              }}
+          />
+          <TextField
+              fullWidth
+              margin="normal"
+              label="手机号"
+              placeholder="请输入手机号"
+              variant="outlined"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              error={isTouched.phone && !formData.phone}
+              helperText={isTouched.phone && !formData.phone ? '手机号不能为空' : ''}
+              disabled={!!success}
+              InputProps={{
+                startAdornment: (
+                    <ContactPhoneOutlinedIcon style={{ marginRight: '8px' }} />
                 ),
               }}
           />
@@ -195,7 +239,7 @@ const SignUp = () => {
               margin="normal"
               disabled={!!success}
               error={
-                  isPasswordTouched &&
+                  isTouched.password &&
                   (!passwordValidations.hasNumber ||
                       !passwordValidations.hasSpecialChar ||
                       !passwordValidations.hasUppercase ||
@@ -250,7 +294,7 @@ const SignUp = () => {
             />
           </FormControl>
           <List>
-            {isPasswordTouched && (
+            {isTouched.password && (
                 <>
                   <ListItem>
                     <ListItemIcon>
@@ -305,6 +349,25 @@ const SignUp = () => {
                 </>
             )}
           </List>
+          <TextField
+              fullWidth
+              margin="normal"
+              label="确认密码" // Label for the password confirmation field
+              placeholder="请再次输入密码"
+              variant="outlined"
+              name="confirmPassword" // Name for the password confirmation field
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              error={isTouched.confirmPassword && formData.password !== formData.confirmPassword}
+              helperText={isTouched.confirmPassword && formData.password !== formData.confirmPassword ? '密码不一致' : ''}
+              disabled={!!success}
+              type={showPassword ? 'text' : 'password'}
+              InputProps={{
+                startAdornment: (
+                    <LockOutlinedIcon style={{ marginRight: '8px' }} />
+                ),
+              }}
+          />
           <Button
               variant="contained"
               color="primary"
@@ -318,6 +381,7 @@ const SignUp = () => {
                       !passwordValidations.hasUppercase ||
                       !passwordValidations.hasLowercase ||
                       !passwordValidations.hasMinLength) ||
+                  formData.password !== formData.confirmPassword ||
                   loading
               }
           >

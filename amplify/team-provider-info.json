@@ -13,11 +13,11 @@
     },
     "categories": {
       "auth": {
-        "airplaneticketsmanagcb2aea5f": {
-          "userPoolId": "ap-southeast-2_putvEszrq",
-          "userPoolName": "UserPool6BA7E5F2-0usNJBCP4ctt",
-          "webClientId": "59iuscnfqkfhpuon526d4m72ck",
-          "nativeClientId": "59iuscnfqkfhpuon526d4m72ck"
+        "airplaneticketsmanag08d7eb38": {
+          "userPoolId": "ap-southeast-2_MaTPWNCqW",
+          "userPoolName": "UserPool6BA7E5F2-EVC9fRAdVon7",
+          "webClientId": "6kmi0iciv370tihps116nnvm95",
+          "nativeClientId": "6kmi0iciv370tihps116nnvm95"
         }
       }
     }

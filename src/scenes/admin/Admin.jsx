@@ -8,6 +8,5 @@ export const Admin = () => {
           PermissionUtils.getToken().then(res => console.log(`${res}`))
         }}>Get Token</button>
       </div>
-
     )
 }

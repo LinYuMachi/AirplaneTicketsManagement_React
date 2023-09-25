@@ -2,7 +2,6 @@ import {Auth, Hub} from "aws-amplify";
 
 export default class PermissionUtils {
   static parseError(errorName) {
-    console.log(errorName);
     let errorMessage;
     switch (errorName) {
       case 'UserNotFoundException':
@@ -50,11 +49,16 @@ export default class PermissionUtils {
     await Auth.signIn(username, password);
   }
 
-  static async signUp(username, password) {
-    const currentUser = this.getUsername();
+  static async signUp(username, password, name, phone) {
+    const currentUser = await this.getUsername();
     await Auth.signUp({
       username,
       password,
+      attributes: {
+        name: name,
+        "custom:phone": phone,
+        "custom:parentAccount": currentUser
+      },
     });
   }
 
