@@ -49,7 +49,7 @@ export default class PermissionUtils {
     await Auth.signIn(username, password);
   }
 
-  static async signUp(username, password, name, phone) {
+  static async signUp(username, password, name, phone, parent) {
     const currentUser = await this.getUsername();
     await Auth.signUp({
       username,
@@ -57,7 +57,7 @@ export default class PermissionUtils {
       attributes: {
         name: name,
         "custom:phone": phone,
-        "custom:parentAccount": currentUser,
+        "custom:parentAccount": parent,
       },
       clientMetadata: {
         currUser: currentUser,

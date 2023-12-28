@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Container,
   TextField,
@@ -14,7 +14,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Tooltip, Alert, // Import Tooltip
+  Tooltip, Alert, MenuItem, Checkbox, Select, Divider, Collapse, Autocomplete, // Import Tooltip
 } from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
@@ -30,6 +30,8 @@ import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import PermissionUtils from "../../utils/PermissionUtils";
 import ObjectUtils from "../../utils/ObjectUtils";
+import {ApiContext} from "../../App";
+import ExpandableDropdown from "../../components/ExpandableDropdown";
 
 const containerStyle = {
   display: 'flex',
@@ -49,12 +51,28 @@ const generateRandomPassword = () => {
 };
 
 const SignUp = () => {
+  const apiClient = useContext(ApiContext);
+  const [children, setChildren] = useState([]);
+  useEffect(() => {
+    apiClient.listChildren().then(data => setChildren(
+        (data?.children ?? []).map((childGroup, i)  =>
+            childGroup.map(child => (
+                {
+                  label: child,
+                  id: child,
+                  group: `Level ${i}`,
+                }
+              ))
+    ).flat()));
+  }, []);
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     confirmPassword: '',
     name: '',
     phone: '',
+    parent: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -75,6 +93,7 @@ const SignUp = () => {
     confirmPassword: false,
     name: false,
     phone: false,
+    parent: false,
   });
   const [copySuccess, setCopySuccess] = useState(false); // Added state for copy success
 
@@ -159,7 +178,7 @@ const SignUp = () => {
         setLoading(false);
         return;
       }
-      await PermissionUtils.signUp(formData.username, formData.password, formData.name, formData.phone)
+      await PermissionUtils.signUp(formData.username, formData.password, formData.name, formData.phone, formData.parent)
       setSuccess('注册成功! 请注意保存密码。');
       setError(null);
     } catch (err) {
@@ -179,6 +198,35 @@ const SignUp = () => {
           </Typography>
         </div>
         <form>
+          <Autocomplete
+              required={true}
+              options={
+                children
+              }
+              disabled={!!success}
+              getOptionLabel={(option) => option.label}
+              variant="outlined"
+              groupBy={(option) => option.group}
+              renderInput={(params) => (
+                  // <TextField {...params} label="代理机构*" variant="outlined" error={isTouched.parent && !formData.parent} />
+                  <TextField
+                      {...params}
+                      fullWidth
+                      margin="normal"
+                      label="代理机构"
+                      placeholder="请输入代理机构"
+                      variant="outlined"
+                      name="username"
+                      error={isTouched.parent && !formData.parent}
+                      helperText={isTouched.parent && !formData.parent ? '代理机构不能为空' : ''}
+                      disabled={!!success}
+                      required
+                  />
+              )}
+              onChange={(event, newValue) => {
+                handleInputChange({target: {name: "parent", value: newValue?.id}});
+              }}
+          />
           <TextField
               fullWidth
               margin="normal"
@@ -196,6 +244,7 @@ const SignUp = () => {
                     <AccountCircleOutlinedIcon style={{ marginRight: '8px' }} />
                 ),
               }}
+              required
           />
           <TextField
               fullWidth
@@ -214,6 +263,7 @@ const SignUp = () => {
                     <BadgeOutlinedIcon style={{ marginRight: '8px' }} />
                 ),
               }}
+              required
           />
           <TextField
               fullWidth
@@ -232,12 +282,14 @@ const SignUp = () => {
                     <ContactPhoneOutlinedIcon style={{ marginRight: '8px' }} />
                 ),
               }}
+              required
           />
           <FormControl
               variant="outlined"
               fullWidth
               margin="normal"
               disabled={!!success}
+              required
               error={
                   isTouched.password &&
                   (!passwordValidations.hasNumber ||
@@ -367,6 +419,7 @@ const SignUp = () => {
                     <LockOutlinedIcon style={{ marginRight: '8px' }} />
                 ),
               }}
+              required
           />
           <Button
               variant="contained"
@@ -374,7 +427,7 @@ const SignUp = () => {
               fullWidth
               onClick={handleSignUp}
               disabled={
-                  !!success || !formData.username ||
+                  !!success || !formData.parent || !formData.username || !formData.phone || !formData.name ||
                   formData.password.trim() === '' ||
                   (!passwordValidations.hasNumber ||
                       !passwordValidations.hasSpecialChar ||

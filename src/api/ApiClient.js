@@ -88,10 +88,14 @@ export default class ApiClient {
     return this.post('upload/passport');
   }
 
-  signUp(username, password) {
-    return this.post('signup', {
-      username: username,
-      password: password,
-    })
+  // signUp(username, password) {
+  //   return this.post('signup', {
+  //     username: username,
+  //     password: password,
+  //   })
+  // }
+
+  listChildren() {
+    return this.get('children')
   }
 }

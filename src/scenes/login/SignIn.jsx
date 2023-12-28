@@ -19,8 +19,11 @@ import {
 
 function SignIn() {
   // root bAuW3&.l6MIZ
-  const [username, setUsername] = useState('test');
-  const [password, setPassword] = useState('Abcdef123!');
+  // child1 V2Jf,7V.=R]G
+  // child2 4VXJ_%GsBz,x
+  // child21 <ev5i^^UY{,w
+  const [username, setUsername] = useState('root');
+  const [password, setPassword] = useState('bAuW3&.l6MIZ');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
