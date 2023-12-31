@@ -11,15 +11,15 @@ export default class ApiClient {
     });
   }
 
-  async send(method, url, data = {}, additionalHeaders = {}) {
+  async send(method, url, data = {}, additionalHeaders = {}, withAuth = true) {
     return this.client({
       method: method,
       url: url,
       data: data ?? {},
-      headers: {
+      headers: withAuth ? {
         Authorization: await PermissionUtils.getToken(),
         ...additionalHeaders,
-      }
+      } : additionalHeaders
     })
         .then((response) => {
           if (response.status === 200) {
@@ -35,17 +35,17 @@ export default class ApiClient {
         });
   }
 
-  async get(url, additionalHeaders = {}){
-    return this.send('get', url, {}, additionalHeaders)
+  async get(url, additionalHeaders = {}, withAuth = true){
+    return this.send('get', url, {}, additionalHeaders, withAuth)
   }
-  async post(url, data = {}, additionalHeaders = {}){
-    return this.send('post', url, data, additionalHeaders)
+  async post(url, data = {}, additionalHeaders = {}, withAuth = true){
+    return this.send('post', url, data, additionalHeaders, withAuth)
   }
-  async put(url, data = {}, additionalHeaders = {}){
-    return this.send('put', url, data, additionalHeaders)
+  async put(url, data = {}, additionalHeaders = {}, withAuth = true){
+    return this.send('put', url, data, additionalHeaders, withAuth)
   }
-  async delete(url, additionalHeaders = {}){
-    return this.send('delete', url, {}, additionalHeaders)
+  async delete(url, additionalHeaders = {}, withAuth = true){
+    return this.send('delete', url, {}, additionalHeaders, withAuth)
   }
 
   test(id) {
@@ -84,9 +84,9 @@ export default class ApiClient {
     return this.get("/flightAgency");
   }
 
-  uploadPassportImage(extension, image) {
-    return this.post('upload/passport');
-  }
+  // uploadPassportImage(extension, image) {
+  //   return this.post('upload/passport');
+  // }
 
   // signUp(username, password) {
   //   return this.post('signup', {
@@ -96,6 +96,16 @@ export default class ApiClient {
   // }
 
   listChildren() {
-    return this.get('children')
+    return this.get('children');
+  }
+
+  getPassportImageUploadLink(extension) {
+    return this.get(`upload/passportImage/link/${extension}`);
+  }
+
+  async uploadImage(extension, file) {
+    const { fileName, preSignedLink } = await this.getPassportImageUploadLink(extension);
+    console.log(fileName, preSignedLink);
+    await this.put(preSignedLink, file, { 'Content-Type': 'image/*' }, false);
   }
 }
