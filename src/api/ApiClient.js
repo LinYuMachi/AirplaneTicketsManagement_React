@@ -104,8 +104,14 @@ export default class ApiClient {
   }
 
   async uploadImage(extension, file) {
-    const { fileName, preSignedLink } = await this.getPassportImageUploadLink(extension);
-    console.log(fileName, preSignedLink);
-    await this.put(preSignedLink, file, { 'Content-Type': 'image/*' }, false);
+    const { fileName, preSignedPutLink, preSignedGetLink } = await this.getPassportImageUploadLink(extension);
+    await this.put(preSignedPutLink, file, { 'Content-Type': 'image/*' }, false);
+    return this.getImageTexts([preSignedGetLink]);
+  }
+
+  getImageTexts(fileNames) {
+    return this.post('upload/passportImage/text', {
+      imageLinks: fileNames
+    })
   }
 }

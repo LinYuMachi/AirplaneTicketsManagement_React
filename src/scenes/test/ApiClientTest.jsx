@@ -19,7 +19,7 @@ export const ApiClientTest = () => {
       const extension = file.name.slice(((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
       // const buffer = await file.arrayBuffer();
       // apiClient.uploadPassportImage(extension, new Int8Array(buffer)).then((resp) => console.log(resp));
-      apiClient.uploadImage(extension, file);
+      apiClient.uploadImage(extension, file).then(data => console.log(data?.texts));
     } else {
       setIsValid(false);
     }
