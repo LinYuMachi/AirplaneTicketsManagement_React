@@ -1,6 +1,6 @@
 {
   "auth": {
-    "airplaneticketsmanag08d7eb38": {
+    "airplaneticketsmanagc982e16d": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -9,35 +9,35 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_airplaneticketsmanag08d7eb38_nativeClientId": {
+    "AMPLIFY_auth_airplaneticketsmanagc982e16d_nativeClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "airplaneticketsmanag08d7eb38"
+          "resourceName": "airplaneticketsmanagc982e16d"
         }
       ]
     },
-    "AMPLIFY_auth_airplaneticketsmanag08d7eb38_userPoolId": {
+    "AMPLIFY_auth_airplaneticketsmanagc982e16d_userPoolId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "airplaneticketsmanag08d7eb38"
+          "resourceName": "airplaneticketsmanagc982e16d"
         }
       ]
     },
-    "AMPLIFY_auth_airplaneticketsmanag08d7eb38_userPoolName": {
+    "AMPLIFY_auth_airplaneticketsmanagc982e16d_userPoolName": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "airplaneticketsmanag08d7eb38"
+          "resourceName": "airplaneticketsmanagc982e16d"
         }
       ]
     },
-    "AMPLIFY_auth_airplaneticketsmanag08d7eb38_webClientId": {
+    "AMPLIFY_auth_airplaneticketsmanagc982e16d_webClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "airplaneticketsmanag08d7eb38"
+          "resourceName": "airplaneticketsmanagc982e16d"
         }
       ]
     }

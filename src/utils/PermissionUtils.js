@@ -75,7 +75,7 @@ export default class PermissionUtils {
 
   static async getToken() {
       return Auth.currentSession()
-          .then(res => res.getIdToken().getJwtToken())
+          .then(res => res.getAccessToken().getJwtToken())
           .catch(() => PermissionUtils.redirectLogIn());
   }
 

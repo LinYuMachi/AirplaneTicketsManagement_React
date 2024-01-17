@@ -178,7 +178,7 @@ const SignUp = () => {
         setLoading(false);
         return;
       }
-      await PermissionUtils.signUp(formData.username, formData.password, formData.name, formData.phone, formData.parent)
+      await apiClient.signUp(formData.username, formData.password, formData.name, formData.phone, formData.parent)
       setSuccess('注册成功! 请注意保存密码。');
       setError(null);
     } catch (err) {

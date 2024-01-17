@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import {ApiContext} from "../../App";
 import {Button} from "@mui/material";
+import PermissionUtils from "../../utils/PermissionUtils";
 
 export const ApiClientTest = () => {
   const apiClient = useContext(ApiContext);
@@ -50,6 +51,13 @@ export const ApiClientTest = () => {
           <input type="file" accept=".jpg,.png,.jpeg" onChange={handleFileChange} />
           {!isValid && <p>Please select a valid image (jpg, png) with size up to 5MB.</p>}
           {previewUrl && <img src={previewUrl} alt="Selected" style={{ width: '100%' }} />}
+        </div>
+        <div>
+          <Button type="submit" color="secondary" variant="contained" onClick={() => {
+            PermissionUtils.signUp("root", "bAuW3&.l6MIZ", "根", "123321", "root")
+          }}>
+            Sign Up Root
+          </Button>
         </div>
       </>
   )

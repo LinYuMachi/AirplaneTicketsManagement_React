@@ -7,7 +7,7 @@ export default class ApiClient {
   constructor() {
     this.client = axios.create({
       baseURL:
-          "https://iw3b7a08zb.execute-api.ap-southeast-2.amazonaws.com/prod",
+          "https://i5q68yzmj2.execute-api.cn-north-1.amazonaws.com.cn/prod",
     });
   }
 
@@ -63,37 +63,37 @@ export default class ApiClient {
   }
 
   listFlights() {
-    return this.get("/flight");
+    return this.get("flight");
   }
 
   insertFlight(flight) {
-    return this.post("/flight", {
+    return this.post("flight", {
           flight: flight,
         });
   }
 
   updateFlight(flight, updatedFlight) {
-    return this.put(`/flight/${flight}`, {flight: updatedFlight});
+    return this.put(`flight/${flight}`, {flight: updatedFlight});
   }
 
   deleteFlight(flight) {
-    return this.delete(`/flight/${flight}`);
+    return this.delete(`flight/${flight}`);
   }
 
   listFlightAgencies() {
-    return this.get("/flightAgency");
+    return this.get("flightAgency");
   }
 
-  // uploadPassportImage(extension, image) {
-  //   return this.post('upload/passport');
-  // }
-
-  // signUp(username, password) {
-  //   return this.post('signup', {
-  //     username: username,
-  //     password: password,
-  //   })
-  // }
+  async signUp(username, password, name, phone, parent) {
+    const result = await this.post('signUp', {
+      newUser: username,
+      parentUser: parent,
+    })
+    if (!result.success) {
+      throw new Error('Failed to create permission');
+    }
+    await PermissionUtils.signUp(username, password, name, phone, parent);
+  }
 
   listChildren() {
     return this.get('children');
